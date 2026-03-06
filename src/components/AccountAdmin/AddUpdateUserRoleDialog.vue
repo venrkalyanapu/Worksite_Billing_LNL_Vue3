@@ -46,8 +46,8 @@
                         <p>This number will be saved as a future two-step verification process for the user.</p>
                       </v-col>
                       <v-col cols="9">
-                        <v-text-field label="(123) 123-1234" v-model="phoneInput" outlined single-line maxlength="14" autofocus :rules="phoneRules" 
-                         v-on:keypress.enter.prevent v-mask="'(###) ###-####'" />
+                        <v-mask-input  label="Telephone" v-model="phoneInput"   variant="outlined"  maxlength="14" autofocus :rules="phoneRules" 
+                          @keydown.enter.prevent  mask="(###) ###-####" placeholder="(123) 123-1234" persistent-placeholder />
                       </v-col>
                       <v-col cols="12">
                         <div style="margin-left: 15px;">Enter a valid mobile number. Standard SMS/Messaging rates may apply.</div>
@@ -103,7 +103,7 @@
                   <div style="margin-left: 15px;"><b>Message sent to user's device, have them check it for their one-time code.</b></div>
                   <v-container grid-list-md text-xs-center>
                     <v-row row wrap>
-                      <v-col cols="12">
+                      <v-col cols="8">
                         <v-text-field label="*one-time code" v-model="pincode" outlined single-line v-mask="'######'" autofocus :rules="pinCodeRules"
                          v-on:keypress.enter.prevent hide-spin-buttons />
                       </v-col>
@@ -163,7 +163,7 @@
         
         <v-dialog v-model="dialog" persistent max-width="550px">
             <template v-slot:activator="{ props }">
-                <v-btn color="#319B42" dark size="large" class="menuBtn  mt-10 mb-8 px-8" v-bind="props" @click="addNewUser" style="display: flex; margin-left: auto; margin-right: auto;" cv-show="allowCreateUser && (existingRolesCount > 0)">Create New User</v-btn>
+                <v-btn color="#319B42" dark size="large" class="menuBtn  mt-10 mb-10 px-6" v-bind="props" @click="addNewUser" style="display: flex; margin-left: auto; margin-right: auto;" cv-show="allowCreateUser && (existingRolesCount > 0)">Create New User</v-btn>
                 <v-btn size="large"  class="menuBtn mt-2"  v-show="!allowCreateUser || (existingRolesCount == 0)">Create New User</v-btn>
             </template>
             <v-card>
@@ -546,13 +546,13 @@ export default {
                         this.pincode = null;
                     }
                     else {
-                        this.errors.push("Unable to save mobile phone number. Please try again later.");
+                        this.setErrorMessages("Unable to save mobile phone number. Please try again later.");
                     }
                 }).catch(e => {
                     this.mfaWaiting = false;
                     this.showPhoneInput = false;
                     this.failedDialog = true;
-                    this.errors.push(e);
+                    this.setErrorMessages(e);
                     Log.logError(e, "ExternalLogin.vue setUserOTPWithPhone");
                 });
             }
@@ -641,7 +641,8 @@ export default {
                     //pin code verification is good. Reset errorCount
                     this.updUserMFAError(0);
                     this.confirmSMS();
-                }
+                     
+                    }
                 else {
                     this.updUserMFAError(this.userMFAErrorCount);
                 }
@@ -712,6 +713,11 @@ export default {
             this.pincode = null;
             this.pinCodeDialog = false;
         },
+        resendCode() {
+      this.$refs.pincodeform.resetValidation();
+      this.waiting = true;
+      this.amplifySignIn(false);
+    },
         save() {
             if (!this.validate()){
                 return;
@@ -946,7 +952,7 @@ export default {
                                     if (lockUserData.statusCode == 200) {
                                         this.setSuccessMessages("User was updated successfully");
                                         req.isActive = this.isUserActive;
-                                        eventBus.$emit("userRoleUpdated", req);
+                                        eventBus.emit("userRoleUpdated", req);
                                     } else {
                                         this.setErrorMessages("unable to update user staus, please contact your administrator"); 
                                     }
@@ -962,7 +968,7 @@ export default {
                         {
                             this.setSuccessMessages("User was created successfully");
                             req.isActive = this.isUserActive; //keep current active flag
-                            eventBus.$emit("userRoleAdded", req);
+                            eventBus.emit("userRoleAdded", req);
                         }
                     } else {
                         this.setErrorMessages(responseData.errorMessage);
