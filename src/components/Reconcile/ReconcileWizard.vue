@@ -2641,12 +2641,12 @@ import { onMounted, ref , nextTick} from 'vue';
    let isgroupshow = false;
    let isreviewdatatable = false;
  onMounted(() => {
-openAllgroupby(false);
+  openAllgroupby(false);
 });
 
  const openAllgroupby = (isreviewdatatable) => {
   setTimeout(() => {
-    console.log("groupHeaders.value" + groupHeaders.value);
+    //console.log("groupHeaders.value" + groupHeaders.value);
     if(!isreviewdatatable){
  Object.values(groupHeaders.value).forEach(header => {
   header.toggleGroup(header.item);
@@ -2654,7 +2654,7 @@ openAllgroupby(false);
  }
   if(isreviewdatatable)
  {
-  console.log("reviewgroupHeaders.value" + reviewgroupHeaders.value);
+  //console.log("reviewgroupHeaders.value" + reviewgroupHeaders.value);
  Object.values(reviewgroupHeaders.value).forEach(header => {
   header.toggleGroup(header.item);
   })

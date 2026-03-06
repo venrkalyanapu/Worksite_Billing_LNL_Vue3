@@ -569,7 +569,7 @@ export default {
         {
           name: "Invoice History",
           route: "/invoicehistory",
-          icon: "history",
+          icon: "mdi-history",
           requireCompanySelected: true,
         },
         {
@@ -581,13 +581,13 @@ export default {
         {
           name: "Payment Settings",
           route: "/Companypaymentinfo", //"/company",
-          icon: "mdi-file-settings-variant-outline",
+          icon: "mdi-file-cog-outline",
           requireCompanySelected: true,
         },
         {
           name: "Account Settings",
           route: "/accountsettings",
-          icon: "mdi-file-settings-variant-outline",
+          icon: "mdi-file-cog-outline",
           requireCompanySelected: true,
         },
       ];
@@ -622,7 +622,7 @@ export default {
           linkArray.push({
             name: "Invoice Home",
             route: "/invoicehome",
-            icon: "home",
+            icon: "mdi-home",
           });
         }
         if (this.checkPermissions("/homeOffice")) {
@@ -652,7 +652,7 @@ export default {
       linkArray.push({
         name: "Training Video",
         route: "/training",
-        icon: "mdi-teach",
+        icon: "mdi-human-male-board",
       });
       linkArray.push({
         name: "Contact Us",
