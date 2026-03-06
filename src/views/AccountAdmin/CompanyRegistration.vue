@@ -49,17 +49,17 @@
     <v-dialog v-model="pinCodeDialog" max-width="550" persistent >
         <v-form ref="pincodeform" >
             <v-card>
-                <v-card-title class="px-2 py-3 v-sheet v-sheet--tile theme--dark v-toolbar v-toolbar--flat tbBackground">
+                <v-card-title style="color:white" class="px-2 py-3 v-sheet v-sheet--tile theme--dark v-toolbar v-toolbar--flat tbBackground">
                 One-Time Code
                 </v-card-title>
                 <v-card-text>
                 <!-- <span style="margin-left: 15px;"><b>{{ pinCodeStatus }}</b></span> -->
                 <br/>
-                    <div style="margin-left: 15px;"><b>{{ messageType() }}</b></div>
+                    <div class = "OTPSubtitle" style="margin-left: 15px;color:rgba(0,0,0,.6)"><b>{{ messageType() }}</b></div>
                     <v-container grid-list-md text-xs-center>
                         <v-row row wrap>
                             <v-col cols="9">
-                            <v-text-field label="*one-time code" v-model="pincode" outlined single-line v-mask="'######'" autofocus :rules="pinCodeRules" 
+                            <v-text-field label="*one-time code" v-model="pincode" variant="outlined" color="primary" single-line v-mask="'######'" autofocus :rules="pinCodeRules" 
                                 v-on:keypress.enter.prevent hide-spin-buttons />
                             </v-col>
                         <v-col cols="3">
@@ -147,14 +147,14 @@
         <v-col cols="8">
         <v-card>
             <v-card-text>
-            <v-alert text color="success" v-if="showSuccessMessages" dismissible>
-                <v-row class="success-message">
-                    <ul id="successMessage">
+            <v-alert text color="success" variant="tonal" v-if="showSuccessMessages" closable>
+                <!-- <v-row class="success-message"> -->
+                    <ul id="successMessage" style="padding-left:20px;color:#4caf50;font-size:16px;">
                         <li v-for="message in successMessages" v-bind:key="message">
                             {{ message }}
                         </li>
                     </ul>
-                </v-row>
+                <!-- </v-row> -->
             </v-alert>
           
 
@@ -1127,5 +1127,12 @@ export default {
 }
 .margin-right-30 {
     margin-right: 30px;
+}
+.OTPSubtitle{
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.375rem;
+    letter-spacing: .0071428571em;
+    color: rgba(0, 0, 0, .6);
 }
 </style>
