@@ -2,7 +2,7 @@
   <span id="invoiceHistory">
     <v-form ref="form" v-model="valid">
       <v-row>
-        <v-layout
+        <v-layout style="margin-left:50px !important;"
           align-content="center"
           align="center"
           justify="center"
@@ -13,8 +13,9 @@
   v-model="search"
   label="Search Invoices for..."
   class="roundedTextBox"
-  variant="outlined"
-  density="compact"
+  variant="solo"
+  rounded
+
   :rules="searchRules"
   append-inner-icon="mdi-magnify"
   @keyup.enter="gotoSearchBy('searchBy')"
@@ -33,8 +34,8 @@
               ref="searchBy"
               @change.passive="$refs['searchRef'].$el.focus()"
               v-on:keyup.enter="$refs['searchRef'].$el.focus()"
-              variant="solo"              
-             rounded
+              variant="solo"
+                    rounded
             ></v-select>
           </v-col>
           <v-col lg="2" xl="1" md="2" sm="2" align="center">
@@ -85,6 +86,8 @@
                   append-icon="search"
                   v-model="search"
                   v-on:keyup.enter="gotoSearchBy('searchBy')"
+                  variant="solo"
+                  rounded
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -99,7 +102,8 @@
                   :items="searchByItems"
                   v-model="searchBy"
                   :rules="searchByRules"
-                  solo
+                  variant="solo"
+                  rounded
                   class="roundedTextBox"
                   ref="searchBy"
                   @change.passive="$refs['searchRef'].$el.focus()"
@@ -143,8 +147,8 @@
         </v-layout>
       </v-row>
     </v-form>
-    <v-row justify="center" align-content="center">
-      <span class="introText">
+    <v-row justify="center" align-content="center" style="margin-left: 20px !important;margin-right:30px !important;">
+      <span class="introText" style="color:#474c55 !important;">
         Past invoices are listed below. Payment dates, billed amounts, and
         invoice statuses are available in the table. You can view or export
         copies of previous invoices and view remittance notices.
@@ -169,17 +173,17 @@
         </i>
       </span>
       <v-tooltip top :color="mainColor">
-        <template v-slot:activator="{ on }">
-          <v-icon @click="generateExcel()" color="#319B42" dark v-on="on"
+        <template #activator="{ props }">
+          <v-icon @click="generateExcel()" color="#319B42" dark v-bind="props"
             >mdi-file-excel</v-icon
           >
         </template>
         <span>Excel</span>
       </v-tooltip>
       <v-tooltip top :color="mainColor">
-        <template v-slot:activator="{ on }">
-          <v-icon @click="generatePDF()" color="#ED722F" dark v-on="on"
-            >mdi-file-pdf-outline</v-icon
+        <template #activator="{ props }">
+          <v-icon @click="generatePDF()" color="#ED722F" dark v-bind="props" 
+            >mdi-file-pdf-box</v-icon
           >
         </template>
         <span>PDF</span>
@@ -198,20 +202,15 @@
       item-key="item.index"
       :items-per-page.sync="itemsPerPage"
       :page.sync="page"
-      dark
+    
       no-data-text="No invoices found."
       id="invoiceHistoryTable"
-      :sort-by.sync="sortBy"
+    
       :sort-desc="true"
       must-sort
-      :footer-props="{
-        'items-per-page-options': [10, 25, 50, 100, 200, -1],
-        'show-current-page': true,
-        'show-first-last-page': true,
-        'items-per-page-text': 'Display records per page: ',
-      }"
+     
     >
-      <template v-slot:footer.page-text="{ pageStart, pageStop, itemsLength }">
+      <!-- <template v-slot:footer.page-text="{ pageStart, pageStop, itemsLength }">
         <div
           :class="
             $vuetify.display.smAndDown
@@ -235,21 +234,21 @@
           ></v-select>
           &nbsp;of&nbsp;{{ maxPages }}
         </div>
-      </template>
+      </template> -->
 
-      <template v-slot:header.dueDate="{ header }">
+      <template v-slot:header.dueDate="{ header,column }">
         <v-tooltip top color="#00558b">
-          <template v-slot:activator="{ on }">
-            <span v-on="on">{{ header.text }}</span>
+          <template #activator="{ props }">
+            <span v-bind="props">{{ column.title }}</span>
           </template>
           <span>Invoice Due Date</span>
         </v-tooltip>
       </template>
 
-      <template v-slot:header.amountBilled="{ header }">
+      <template v-slot:header.amountBilled="{ header,column }">
         <v-tooltip top color="#00558b">
-          <template v-slot:activator="{ on }">
-            <span v-on="on">{{ header.text }}</span>
+          <template #activator="{ props }">
+            <span v-bind="props">{{ column.title  }}</span>
           </template>
           <span>Amount Billed</span>
         </v-tooltip>
@@ -264,46 +263,46 @@
         </v-tooltip>
       </template> -->
 
-      <template v-slot:header.displayAdjustmentAmount="{ header }">
+      <template v-slot:header.displayAdjustmentAmount="{ header,column }">
         <v-tooltip top color="#00558b">
-          <template v-slot:activator="{ on }">
-            <span v-on="on">{{ header.text }}</span>
+          <template #activator="{ props }">
+            <span v-bind="props">{{ column.title }}</span>
           </template>
           <span>Total Adjustments</span>
         </v-tooltip>
       </template>
 
-      <template v-slot:header.amountPaid="{ header }">
+      <template v-slot:header.amountPaid="{ header,column }">
         <v-tooltip top color="#00558b">
-          <template v-slot:activator="{ on }">
-            <span v-on="on">{{ header.text }}</span>
+          <template #activator="{ props }">
+            <span v-bind="props">{{ column.title }}</span>
           </template>
           <span>Amount Paid</span>
         </v-tooltip>
       </template>
 
-      <template v-slot:header.paymentDate="{ header }">
+      <template v-slot:header.paymentDate="{ header,column }">
         <v-tooltip top color="#00558b">
-          <template v-slot:activator="{ on }">
-            <span v-on="on">{{ header.text }}</span>
+          <template #activator="{ props }">
+            <span v-bind="props">{{ column.title }}</span>
           </template>
           <span>Date Paid</span>
         </v-tooltip>
       </template>
 
-      <template v-slot:header.invoiceStatus="{ header }">
+      <template v-slot:header.invoiceStatus="{ header,column }">
         <v-tooltip top color="#00558b">
-          <template v-slot:activator="{ on }">
-            <span v-on="on">{{ header.text }}</span>
+          <template #activator="{ props }">
+            <span v-bind="props">{{ column.title }}</span>
           </template>
           <span>Invoice Status</span>
         </v-tooltip>
       </template>
 
-      <template v-slot:header.link="{ header }">
+      <template v-slot:header.link="{ header,column }">
         <v-tooltip top color="#00558b">
-          <template v-slot:activator="{ on }">
-            <span v-on="on">{{ header.text }}</span>
+          <template #activator="{ props }">
+            <span v-bind="props">{{ column.title }}</span>
           </template>
           <span>View &amp; Export Invoice</span>
           <!-- <span>View Remittance Notice</span> -->
@@ -321,12 +320,12 @@
         >mdi-chevron-double-right</v-icon>-->
 
         <v-tooltip top :color="mainColor">
-          <template v-slot:activator="{ on }">
+          <template #activator="{ props }">
             <v-icon
               @click="getDetail(item)"
               color="#00558c"
               dark
-              v-on="on"
+              v-bind="props"
               class="padRightIcon"
               >mdi-page-next-outline</v-icon
             >
@@ -335,12 +334,12 @@
         </v-tooltip>
 
         <v-tooltip top :color="mainColor">
-          <template v-slot:activator="{ on }">
+          <template #activator="{ props }">
             <v-icon
               @click="exportInvoiceExcel(item)"
               color="#319B42"
               dark
-              v-on="on"
+              v-bind="props"
               class="iconColumn"
               >mdi-file-excel</v-icon
             >
@@ -348,34 +347,36 @@
           <span>Download Invoice as Excel</span>
         </v-tooltip>
         <v-tooltip top :color="mainColor">
-          <template v-slot:activator="{ on }">
+          <template #activator="{ props }">
             <v-icon
               @click="exportInvoicePDF(item)"
               color="#ED722F"
-              dark
-              v-on="on"
+              dark 
+              
+              v-bind="props"
               class="iconColumn"
-              >mdi-file-pdf-outline</v-icon
+              >mdi-file-pdf-box</v-icon
             >
           </template>
           <span>Download Invoice as PDF</span>
         </v-tooltip>
       </template>
-      <template v-slot:item.amountPaid="{ item }">{{
-        item.amountPaid | money
+      <template v-slot:item.amountPaid="{ item }"> {{ 
+        $filters.money(item.amountPaid) 
       }}</template>
       <template v-slot:item.amountBilled="{ item }">{{
-        item.amountBilled | money
+        $filters.money(item.amountBilled)
       }}</template>
       <!-- <template v-slot:item.adjustmentAmount="{ item }">{{ item.adjustmentAmount | money }}</template> -->
       <template v-slot:item.displayAdjustmentAmount="{ item }">{{
-        item.displayAdjustmentAmount | money
+        $filters.money(item.displayAdjustmentAmount)
       }}</template>
       <template v-slot:item.dueDate="{ item }">{{
-        item.dueDate | mdyyyy
+        $filters.mdyyyy(item.dueDate) 
       }}</template>
       <template v-slot:item.paymentDate="{ item }">{{
-        item.paymentDate | mdyyyy
+        
+        $filters.mdyyyy(item.paymentDate)
       }}</template>
     </v-data-table>
 
@@ -435,9 +436,10 @@
 </template>
 <script>
 // import store from "@/store";
-
+import glLnlSmBlue from '@/assets/glLnlSmBlue.png';
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import { applyPlugin } from 'jspdf-autotable';
 import dateFormat from "dateformat";
 
 import { HTTP } from "@/HTTP-common.js";
@@ -447,7 +449,7 @@ import exportInvoice from "@/export-invoice.js";
 
 import Log from "@/log.js";
 import eventBus from "@/event-bus.js";
-
+applyPlugin(jsPDF);
 export default {
   name: "InvoiceHistory",
 
@@ -511,6 +513,7 @@ export default {
               this.searching = false;
               this.errDialog = true;
             } else {
+              
               //this.listHistItems = response.data.invoices;
               //this.fullListHistItems = response.data.invoices;
               let formattedInvoices = this.formatInvoiceData(
@@ -519,6 +522,7 @@ export default {
               this.listHistItems = formattedInvoices;
               this.fullListHistItems = formattedInvoices;
               this.searching = false;
+          
             }
           } catch (e) {
             Log.logError(
@@ -545,7 +549,7 @@ export default {
   },
   data() {
     return {
-      sortBy: ["dueDate"],
+      sortBy: [{key :'dueDate'}],
       errDialog: false,
       searchClicked: false,
       searchActive: false,
@@ -567,20 +571,45 @@ export default {
       ],
       pagination: { totalItems: 200, rowsPerPage: 10, page: 1 },
       headers: [
-        { title: "Invoice Due Date", name: "dueDate", dataType: "string" },
-        { title: "Amount Billed", name: "amountBilled", dataType: "number" },
+        { title: "Invoice Due Date", key: "dueDate", dataType: "string" },
+        { title: "Amount Billed", key: "amountBilled", dataType: "number" },
         // { text: "Total Adjustments", value: "adjustmentAmount" },
         {
           title: "Total Adjustments",
-          name: "displayAdjustmentAmount",
+          key: "displayAdjustmentAmount",
           dataType: "number",
         },
-        { title: "Amount Paid", name: "amountPaid", dataType: "number" },
-        { title: "Date Paid", name: "paymentDate", dataType: "string" },
-        { tiyle: "Invoice Status", name: "invoiceStatus", dataType: "string" },
+        { title: "Amount Paid", key: "amountPaid", dataType: "number" },
+        { title: "Date Paid", key: "paymentDate", dataType: "string" },
+        { title: "Invoice Status", key: "invoiceStatus", dataType: "string" },
         {
           title: "View & Export",
-          name: "link",
+          key: "link",
+          align: "center",
+          sortable: false,
+        },
+        // {
+        //   text: "Remittance Notice",
+        //   value: "link",
+        //   align: "center",
+        //   sortable: false
+        // }
+      ],
+      excelheaders: [
+        { text: "Invoice Due Date", value: "dueDate", dataType: "string" },
+        { text: "Amount Billed", value: "amountBilled", dataType: "number" },
+        // { text: "Total Adjustments", value: "adjustmentAmount" },
+        {
+          text: "Total Adjustments",
+          key: "displayAdjustmentAmount",
+          dataType: "number",
+        },
+        { text: "Amount Paid", value: "amountPaid", dataType: "number" },
+        { text: "Date Paid", value: "paymentDate", dataType: "string" },
+        { text: "Invoice Status", value: "invoiceStatus", dataType: "string" },
+        {
+          text: "View & Export",
+          value: "link",
           align: "center",
           sortable: false,
         },
@@ -707,9 +736,10 @@ export default {
     },
     getDetail(item) {
       this.$store.commit("setCurrentInvoice", item);
-      router.push({ name: "Invoice View" });
+      this.$router.push({ name: "Invoice View" });
     },
     formatInvoiceData(invoices) {
+      
       invoices.forEach((invoice) => {
         invoice.displayAdjustmentAmount = invoice.totalAdjustedAmount;
         if (
@@ -726,7 +756,10 @@ export default {
             //this.hasDiscrepancy = true;
           }
         }
+      
+        
       });
+    
       return invoices;
     },
     generateData(headers, pdfdata) {
@@ -737,7 +770,7 @@ export default {
           let dataArray = [];
 
           for (let j = 0; j < headers.length; j++) {
-            dataArray.push(pdfdata[i][headers[j].value]);
+            dataArray.push(pdfdata[i][headers[j].key]);
           }
 
           result.push(dataArray);
@@ -757,15 +790,14 @@ export default {
       } catch (e) {
         Log.logError(e, "InvoiceHistoryPage.vue createHeaders");
       }
-
       return [result];
     },
-    getHeadersExcel(headers) {
+    getHeadersExcel(excelheaders) {
       let result = [];
 
       try {
-        for (let j = 0; j < headers.length - 1; j++) {
-          result.push(headers[j]);
+        for (let j = 0; j < excelheaders.length - 1; j++) {
+          result.push(excelheaders[j]);
         }
       } catch (e) {
         Log.logError(e, "InvoiceHistoryPage.vue getHeadersExcel");
@@ -780,12 +812,12 @@ export default {
           let newItem = {};
 
           for (let j = 0; j < headers.length - 1; j++) {
-            let value = items[i][headers[j].value];
+            let value = items[i][headers[j].key];
 
-            switch (headers[j].value) {
+            switch (headers[j].key) {
               case "dueDate":
               case "paymentDate":
-                value = this.$options.filters.mdyyyy(value);
+                value = this.$filters.mdyyyy(value);
                 if (value == "1/1/1900") value = "";
                 break;
 
@@ -793,7 +825,7 @@ export default {
               case "amountBilled":
               case "amountPaid":
               case "displayAdjustmentAmount":
-                value = this.$options.filters.money(value);
+                value = this.$filters.money(value);
                 break;
 
               case "invoiceStatus":
@@ -807,7 +839,7 @@ export default {
             }
 
             value = value ? value : "";
-            newItem[headers[j].value] = value;
+            newItem[headers[j].key] = value;
           }
 
           newItem.link = "";
@@ -821,15 +853,15 @@ export default {
     },
     formatDataTable(headers, items) {
       let dataArray = [];
-
       try {
         for (let i = 0; i < items.length; i++) {
           let newItem = {};
 
           for (let j = 0; j < headers.length; j++) {
-            let value = items[i][headers[j].value];
+            let value = items[i][headers[j].key];
 
-            switch (headers[j].value) {
+
+            switch (headers[j].key) {
               case "invoiceStatus":
                 if (value.toUpperCase() == "C") value = "Changed";
                 else if (value.toUpperCase() == "F") value = "Past Due";
@@ -841,12 +873,13 @@ export default {
                 break;
             }
 
-            newItem[headers[j].value] = value;
+            newItem[headers[j].key] = value;
           }
 
           newItem.invoiceId = items[i].invoiceId;
 
           dataArray.push(newItem);
+        
         }
       } catch (e) {
         Log.logError(e, "InvoiceHistoryPage.vue formatDataTable");
@@ -856,18 +889,17 @@ export default {
     },
     formatDataPDF(headers, items) {
       let dataArray = [];
-
       try {
         for (let i = 0; i < items.length; i++) {
           let newItem = {};
 
           for (let j = 0; j < headers.length; j++) {
-            let value = items[i][headers[j].value];
+            let value = items[i][headers[j].key];
 
-            switch (headers[j].value) {
+            switch (headers[j].key) {
               case "dueDate":
               case "paymentDate":
-                value = this.$options.filters.mdyyyy(value);
+                value = this.$filters.mdyyyy(value);
 
                 if (value == "1/1/1900") value = "";
 
@@ -877,7 +909,7 @@ export default {
               case "amountBilled":
               case "amountPaid":
               case "displayAdjustmentAmount":
-                value = this.$options.filters.money(value);
+                value = this.$filters.money(value);
                 break;
 
               case "invoiceStatus":
@@ -891,7 +923,7 @@ export default {
                 break;
             }
 
-            newItem[headers[j].value] = value;
+            newItem[headers[j].key] = value;
           }
 
           newItem.invoiceId = items[i].invoiceId;
@@ -932,7 +964,7 @@ export default {
             "_" +
             dateFormat(Date.now(), "hhMMss"),
           titleLines: [],
-          headers: this.getHeadersExcel(this.headers),
+          headers: this.getHeadersExcel(this.excelheaders),
           items: this.formatDataExcel(this.headers, this.listHistItems),
         };
         if (this.hasDiscrepancy) {
@@ -1052,9 +1084,8 @@ export default {
         );
         let pdfData = this.generateData(this.headers, formattedData);
         let pdfHeaders = this.createHeaders(this.headers);
-
         let logo = new Image();
-        logo.src = require("@/assets/glLnlSmBlue.png");
+        logo.src = glLnlSmBlue;
         // logo.src = require("@/assets/globe_logo_new.png");
 
         doc.addImage(logo, "PNG", 50, 50, 200, 40);
@@ -1102,7 +1133,6 @@ export default {
             pageNumber,
             chunkSize
           );
-
           if (chunkedPdfData.length == 0) {
             break;
           }
@@ -1144,7 +1174,7 @@ export default {
           });
 
           doc.text(
-            this.$options.filters.mdyyyy(Date.now()),
+            this.$filters.mdyyyy(Date.now()),
             125,
             pageNumber == 1 ? 130 : 90,
             { align: "left" }
@@ -1164,7 +1194,6 @@ export default {
 
           doc.setFont("helvetica", "normal");
           doc.setFontSize("12");
-
           doc.autoTable({
             theme: "striped",
             head: pdfHeaders,
@@ -1185,7 +1214,6 @@ export default {
         //   startY: 150,
         //   headStyles: { fillColor: "#64CCC9" }
         // });
-
         doc.save(
           "invoiceHistory_" +
             this.$store.state.currentFranchise.franchiseNumber +
@@ -1229,5 +1257,10 @@ table .theme--dark.v-icon {
 }
 .padRightIcon {
   padding-right: 4px;
+}
+
+.custom-tooltip {
+    background: rgb(0, 85, 150) !important;
+    opacity: 1 !important;
 }
 </style>

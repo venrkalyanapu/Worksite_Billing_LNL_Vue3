@@ -550,6 +550,7 @@
         <side-bar :narrow="true" />
       </v-col>
     </v-row>
+   
     <v-row
       id="stepperRow"
       style="padding-top: 0px !important; margin-top: 1px !important"
@@ -569,9 +570,9 @@
               :group-by="groupCriteria" 
               :group-desc="!sortNameAsc"
               :items="filteredItems"
-              fixed-header
-         :items-per-page="showitemsPerPage"
-          
+              
+              :itemsPerPage="showitemsPerPage"
+          fixed-header
               class="elevation-1 ext-caption"
               style="
                 margin-left: 0px;
@@ -669,8 +670,8 @@
                 </div>
               </template>
             <template #group-header="{ item, columns, toggleGroup, isGroupOpen }">
-         
-        <tr>  
+         <template :ref="(el) => { groupHeaders[item.value] = { item, toggleGroup, isGroupOpen } }" />
+        <tr >  
         <td :colspan="columns.length" style="background-color: #00558c !important;color:white!important">
       
           <!-- Toggle button using an icon -->
@@ -680,7 +681,7 @@
         
           v-bind="props"
             :icon="isGroupOpen(item) ? 'mdi-minus' : 'mdi-plus'"
-            
+            :data-open ="isGroupOpen(item)" 
             size="small"
             variant="text"
             @click="toggleGroup(item)"
@@ -694,7 +695,7 @@
                        <template #activator="{ props }">
                       <span v-bind="props"
                         v-if="groupCriteria[0].key == 'empId'"
-                        @click="groupCriteria[0].key = 'name';"
+                        @click="groupCriteria[0].key = 'name'; openAllgroupby(false)"
                        
                         style="cursor: pointer;"
                         >{{
@@ -706,7 +707,7 @@
                       <span v-bind="props"
                        
                         style="cursor: pointer;"
-                        @click="groupCriteria[0].key = 'empId'"
+                        @click="groupCriteria[0].key = 'empId'; openAllgroupby(false)"
                         v-else
                         >{{  item.value }}</span
                       >
@@ -1223,7 +1224,7 @@
             </template>
 
              <template #group-header="{ item, columns, toggleGroup, isGroupOpen }">
-               
+               <template :ref="(el) => { reviewgroupHeaders[item.value] = { item, toggleGroup, isGroupOpen } }" />
                <tr>
         <td :colspan="columns.length" style="background-color: #00558c !important;color:white!important">
         
@@ -1578,7 +1579,7 @@
           large
           :color="$store.state.mainColor"
           dark
-          @click.stop="saveContinueBtnMethod(stepperPage)"
+          @click.stop="saveContinueBtnMethod(stepperPage);openAllgroupby(true);"
           v-if="
             (!isLocked || hasLock) &&
             stepperPage == stepperDefs.invoiceAdjustments &&
@@ -1659,7 +1660,7 @@
           large
           :color="$store.state.mainColor"
           dark
-          @click.stop="moveToStep(stepperPage + 1)"
+          @click.stop="moveToStep(stepperPage + 1);"
           v-if="
             stepperPage == stepperDefs.invoiceAdjustments ||
             (stepperPage == stepperDefs.reviewChanges && canProcessPayment)
@@ -2195,7 +2196,7 @@
             color="#319B42"
             dark
             class="menuBtn bottomMargin alertbtn"
-            @click="loadScheduledInvoice()"
+            @click="loadScheduledInvoice(); openAllgroupby(false);"
             >Yes</v-btn
           >
 
@@ -2633,10 +2634,36 @@ import { onMounted, ref , nextTick} from 'vue';
 
 
   const groupHeaders = ref({})
+  const reviewgroupHeaders = ref({})
   const groupedItems = [];
   const groupRefs = [];
    let showitemsPerPage = 10;
    let isgroupshow = false;
+   let isreviewdatatable = false;
+ onMounted(() => {
+openAllgroupby(false);
+});
+
+ const openAllgroupby = (isreviewdatatable) => {
+  setTimeout(() => {
+    console.log("groupHeaders.value" + groupHeaders.value);
+    if(!isreviewdatatable){
+ Object.values(groupHeaders.value).forEach(header => {
+  header.toggleGroup(header.item);
+  })
+ }
+  if(isreviewdatatable)
+ {
+  console.log("reviewgroupHeaders.value" + reviewgroupHeaders.value);
+ Object.values(reviewgroupHeaders.value).forEach(header => {
+  header.toggleGroup(header.item);
+  })
+ }
+
+ 
+  }, 1000)
+  //showitemsPerPage =10;
+ }
 
 </script>
 <script>
@@ -3476,6 +3503,7 @@ export default {
         this.stepperPage != this.stepperDefs.complete &&
         this.listItems.length;
       let showed = this.hasStepperPermission("invoiceAdjustments", "update");
+ 
       return rendered && showed;
     },
     depositCheckComputed() {
@@ -3630,7 +3658,6 @@ export default {
     },
   },
   methods: {
-    
    
      callGetInvoiceDetails(firstCall) {
       this.searching = true;

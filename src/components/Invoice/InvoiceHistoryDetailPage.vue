@@ -1,19 +1,19 @@
 <template>
-  <v-flex xs12>
-    <v-layout justify-start align-content-start>
+  <v-col cols="12">
+    <v-layout justify="start" align-content="start">
       <v-row>
         <v-col>
           <span class="introText">
             Invoice Due Date:
-            <span class="bolded">{{ dueDate | mdyyyy }}</span>
+            <span class="bolded">{{ $filters.mdyyyy(dueDate) }}</span>
             <br />
             <span v-if="status && status.toLowerCase() == 'paid'">
               Invoice Paid Date:
-              <span class="bolded">{{ paidDate | mdyyyy }}</span>
+              <span class="bolded">{{ $filters.mdyyyy(paidDate) }}</span>
             </span>
             <span v-else>
               Invoice Delinquent Date:
-              <span class="bolded">{{ delinquentDate | mdyyyy }}</span>
+              <span class="bolded">{{ $filters.mdyyyy(delinquentDate) }}</span>
             </span>
             <br />Current Status:
             <span :class="isPastDue ? 'pastDue' : 'paid'">{{ status }}</span>
@@ -25,18 +25,18 @@
         <v-col>
           <span class="introText">
             Total Amount Billed:
-            <span class="bolded">{{ totalBilled | money }}</span>
+            <span class="bolded">{{ $filters.money(totalBilled) }}</span>
             <br />
             Total Amount Adjusted:
-            <span>{{ displayTotalAdjusted | money }}</span>
+            <span>{{ $filters.money(displayTotalAdjusted) }}</span>
             <br />
             <span v-if="status && status.toLowerCase() == 'paid'">
               Total Amount Paid:
-              <span class="bolded">{{ paymentAmount | money }}</span>
+              <span class="bolded">{{ $filters.money(paymentAmount) }}</span>
             </span>
             <span v-else>
               Total Amount Due:
-              <span class="bolded">{{ totalDue | money }}</span>
+              <span class="bolded">{{ $filters.money(totalDue) }}</span>
             </span>
             <br />
             <br />
@@ -47,20 +47,22 @@
 
     <v-form ref="form" v-model="valid">
       <v-row>
-        <v-layout
-          align-content-center
-          align-center
-          justify-center
-          v-if="$vuetify.breakpoint.mdAndUp"
+        <v-layout style="margin-left:50px"; 
+          align-content="center"
+          align="center"
+          justify="center"
+          v-if="$vuetify.display.mdAndUp"
         >
           <v-col lg="3" xl="3" md="4" sm="4">
             <v-text-field
-              solo
+                variant="solo"
+                rounded
               v-model="search"
               label="Search Policies for..."
               class="roundedTextBox"
               :rules="searchRules"
               append-icon="search"
+               append-inner-icon="mdi-magnify"
               v-on:keyup.enter="gotoSearchBy('searchBy')"
             ></v-text-field>
           </v-col>
@@ -76,7 +78,8 @@
               class="roundedTextBox"
               @change.passive="$refs['searchRef'].$el.focus()"
               v-on:keyup.enter="$refs['searchRef'].$el.focus()"
-              solo
+                variant="solo"
+              rounded
             ></v-select>
           </v-col>
           <v-col lg="2" xl="1" md="2" sm="2" align="center">
@@ -111,16 +114,17 @@
           </v-col>
         </v-layout>
         <v-layout
-          align-content-center
-          align-center
-          justify-center
-          v-if="$vuetify.breakpoint.smAndDown"
+          align-content="center"
+          align="center"
+          justify="center"
+          v-if="$vuetify.display.smAndDown"
         >
           <v-container>
             <v-row>
               <v-col :cols="12" align="center">
                 <v-text-field
-                  solo
+                    variant="solo"
+                  rounded
                   label="Search Policies for..."
                   class="roundedTextBox"
                   :rules="searchRules"
@@ -142,7 +146,8 @@
                   :items="searchByItems"
                   v-model="searchBy"
                   :rules="searchByRules"
-                  solo
+                    variant="solo"
+                  rounded
                   class="roundedTextBox"
                   @change.passive="$refs['searchRef'].$el.focus()"
                   v-on:keyup.enter="$refs['searchRef'].$el.focus()"
@@ -188,30 +193,30 @@
 
     <v-row>
       <v-col :cols="9" v-if="hasDiscrepancy">
-        <v-layout justify-left align-content-left>
+        <v-layout justify="left" align-content="left">
           <span class="discrepancyNote" v-if="hasDiscrepancy">
             <i>{{ discrepancyNote }}</i>
           </span>
         </v-layout>
       </v-col>
       <v-col v-if="$store.state.testFeatures">
-        <v-layout align-end align-content-end justify-end>
+        <v-layout align="end" align-content="end" justify="end" style="margin-left:95% !important;">
           <v-tooltip top :color="mainColor">
-            <template v-slot:activator="{ on }">
+            <template #activator="{ props }">
               <v-icon
                 @click="exportInvoiceExcel()"
                 color="#319B42"
                 dark
-                v-on="on"
+                v-bind="props"
                 >mdi-file-excel</v-icon
               >
             </template>
             <span>Download as Excel</span>
           </v-tooltip>
           <v-tooltip top :color="mainColor">
-            <template v-slot:activator="{ on }">
-              <v-icon @click="exportInvoicePDF()" color="#ED722F" dark v-on="on"
-                >mdi-file-pdf-outline</v-icon
+            <template #activator="{ props }">
+              <v-icon @click="exportInvoicePDF()" color="#ED722F" dark v-bind="props"
+                >mdi-file-pdf-box</v-icon
               >
             </template>
             <span>Download as PDF</span>
@@ -219,7 +224,8 @@
         </v-layout>
       </v-col>
     </v-row>
-    <v-data-table
+    <v-data-table 
+    id ="histortdb"
       :headers="headers"
       :items="filteredItems"
       class="elevation-3"
@@ -277,129 +283,128 @@
         </v-tooltip>
       </template>-->
 
-      <template v-slot:header.employeeId="{ header }">
+      <template v-slot:header.employeeId="{ header,column }">
         <v-tooltip top color="#00558b">
-          <template v-slot:activator="{ on }">
-            <span v-on="on">{{ header.text }}</span>
+          <template #activator="{ props }">
+            <span v-bind="props">{{ column.title }}</span>
           </template>
           <span>Employee ID</span>
         </v-tooltip>
       </template>
 
-      <template v-slot:header.policyNumber="{ header }">
+      <template v-slot:header.policyNumber="{ header,column }">
         <v-tooltip top color="#00558b">
-          <template v-slot:activator="{ on }">
-            <span v-on="on">{{ header.text }}</span>
+          <template #activator="{ props }">
+            <span v-bind="props">{{ column.title }}</span>
           </template>
           <span>Policy Number</span>
         </v-tooltip>
       </template>
 
-      <template v-slot:header.policyType="{ header }">
+      <template v-slot:header.policyType="{ header,column }">
         <v-tooltip top color="#00558b">
-          <template v-slot:activator="{ on }">
-            <span v-on="on">{{ header.text }}</span>
+          <template #activator="{ props }">
+            <span v-bind="props">{{ column.title }}</span>
           </template>
           <span>Policy Type</span>
         </v-tooltip>
       </template>
 
-      <template v-slot:header.name="{ header }">
+      <template v-slot:header.name="{ header,column }">
         <v-tooltip top color="#00558b">
-          <template v-slot:activator="{ on }">
-            <span v-on="on">{{ header.text }}</span>
+          <template #activator="{ props }">
+            <span v-bind="props">{{ column.title }}</span>
           </template>
           <span>Employee Name</span>
         </v-tooltip>
       </template>
 
-      <template v-slot:header.insuredName="{ header }">
+      <template v-slot:header.insuredName="{ header,column }">
         <v-tooltip top color="#00558b">
-          <template v-slot:activator="{ on }">
-            <span v-on="on">{{ header.text }}</span>
+          <template #activator="{ props }">
+            <span v-bind="props">{{ column.title }}</span>
           </template>
           <span>Insured Name</span>
         </v-tooltip>
       </template>
 
-      <template v-slot:header.dueDate="{ header }">
+      <template v-slot:header.dueDate="{ header,column }">
         <v-tooltip top color="#00558b">
-          <template v-slot:activator="{ on }">
-            <span v-on="on">{{ header.text }}</span>
+          <template #activator="{ props }">
+            <span v-bind="props">{{ column.title }}</span>
           </template>
           <span>Due Date</span>
         </v-tooltip>
       </template>
 
-      <template v-slot:header.premiumDeducted="{ header }">
+      <template v-slot:header.premiumDeducted="{ header,column }">
         <v-tooltip top color="#00558b">
-          <template v-slot:activator="{ on }">
-            <span v-on="on">{{ header.text }}</span>
+          <template #activator="{ props }">
+            <span v-bind="props">{{ column.title }}</span>
           </template>
           <span>Premium Deducted</span>
         </v-tooltip>
       </template>
 
-      <template v-slot:header.totalPremium="{ header }">
+      <template v-slot:header.totalPremium="{ header,column }">
         <v-tooltip top color="#00558b">
-          <template v-slot:activator="{ on }">
-            <span v-on="on">{{ header.text }}</span>
+          <template #activator="{ props }">
+            <span v-bind="props">{{ column.title }}</span>
           </template>
           <span>Total Premium</span>
         </v-tooltip>
       </template>
 
-      <template v-slot:header.changeCode="{ header }">
+      <template v-slot:header.changeCode="{ header,column }">
         <v-tooltip top color="#00558b">
-          <template v-slot:activator="{ on }">
-            <span v-on="on">{{ header.text }}</span>
+          <template #activator="{ props }">
+            <span v-bind="props">{{ column.title }}</span>
           </template>
           <span>Change Reason</span>
         </v-tooltip>
       </template>
 
-      <template v-slot:header.adjustedAmount="{ header }">
+      <template v-slot:header.adjustedAmount="{ header,column }">
         <v-tooltip top color="#00558b">
-          <template v-slot:activator="{ on }">
-            <span v-on="on">{{ header.text }}</span>
+          <template #activator="{ props }">
+            <span v-bind="props">{{ column.title }}</span>
           </template>
           <span>Adjusted Amount</span>
         </v-tooltip>
       </template>
 
-      <template v-slot:header.totalAfterAdjustment="{ header }">
+      <template v-slot:header.totalAfterAdjustment="{ header,column }">
         <v-tooltip top color="#00558b">
-          <template v-slot:activator="{ on }">
-            <span v-on="on">{{ header.text }}</span>
+          <template #activator="{ props }">
+            <span v-bind="props">{{ column.title }}</span>
           </template>
           <span>Total After Adjustment</span>
         </v-tooltip>
       </template>
 
       <template v-slot:item.premiumDeducted="{ item }">{{
-        item.premiumDeducted | money
+        $filters.money(item.premiumDeducted)
       }}</template>
       <template v-slot:item.totalPremium="{ item }">{{
-        item.totalPremium | money
+        $filters.money(item.totalPremium)
       }}</template>
       <template v-slot:item.adjustedAmount="{ item }">{{
-        item.adjustedAmount | money
+        $filters.money(item.adjustedAmount)
       }}</template>
       <template v-slot:item.totalAfterAdjustment="{ item }">{{
-        item.totalAfterAdjustment | money
+        $filters.money(item.totalAfterAdjustment)
       }}</template>
       <template v-slot:item.dueDate="{ item }">{{
-        item.dueDate | mdyyyy
+        $filters.mdyyyy(item.dueDate) 
       }}</template>
       <!-- <template v-slot:item.isSection125="{ item }">
         {{
         item.isSection125 | boolYesNo
         }}
       </template>-->
-
-      <template
+  <template
         v-slot:body.append
-        v-if="!searchFilter && !searchByFilter && !$vuetify.breakpoint.xs"
+        v-if="!searchFilter && !searchByFilter && !$vuetify.display.xs"
       >
         <tr>
           <!-- Change this to 8 for section125 / pre-tax -->
@@ -407,17 +412,17 @@
             <strong>TOTALS</strong>
           </td>
           <td>
-            <strong>{{ totalPremDeducted | money }}</strong>
+            <strong>{{ $filters.money(totalPremDeducted) }}</strong>
           </td>
           <td>
-            <strong>{{ totalBilled | money }}</strong>
+            <strong>{{ $filters.money(totalBilled) }}</strong>
           </td>
           <td colspan="1"></td>
           <td>
-            <strong>{{ totalAdjusted | money }}</strong>
+            <strong>{{ $filters.money(totalAdjusted) }}</strong>
           </td>
           <td>
-            <strong>{{ totalDue | money }}</strong>
+            <strong>{{ $filters.money(totalDue) }}</strong>
           </td>
         </tr>
       </template>
@@ -426,17 +431,18 @@
           <td>
             <strong>TOTALS</strong>
             <br />Premiums Deducted:&nbsp;
-            <strong>{{ totalPremDeducted | money }}</strong>
+            <strong>{{ $filters.money(totalPremDeducted) }}</strong>
             <br />Premiums:&nbsp;
-            <strong>{{ totalBilled | money }}</strong>
+            <strong>{{ $filters.money(totalBilled) }}</strong>
             <br />Adjusted Amounts:&nbsp;
-            <strong>{{ totalAdjusted | money }}</strong>
+            <strong>{{ $filters.money(totalAdjusted) }}</strong>
             <br />Total After Adjustments:&nbsp;
-            <strong>{{ totalDue | money }}</strong>
+            <strong>{{ $filters.money(totalDue) }}</strong>
             <br />
           </td>
         </tr>
       </template>
+    
     </v-data-table>
 
     <v-dialog v-model="waitDialog" persistent width="350">
@@ -458,7 +464,7 @@
 
     <v-progress-circular
       v-if="waiting"
-      :class="$vuetify.breakpoint.smAndDown ? 'waitCircleSm' : 'waitCircle'"
+      :class="$vuetify.display.smAndDown ? 'waitCircleSm' : 'waitCircle'"
       indeterminate
       color="#319B42"
       :size="70"
@@ -494,7 +500,7 @@
         <v-icon>mdi-chevron-double-left</v-icon>&nbsp;Back to History
       </router-link>
     </v-layout>
-  </v-flex>
+  </v-col>
 </template>
 <script>
 // import jsPDF from "jspdf";
@@ -557,6 +563,7 @@ export default {
                 //withCredentials: true,
               })
                 .then((response) => {
+                  
                   if (response.status != 200) {
                     Log.logError(
                       response.statusText,
@@ -646,7 +653,7 @@ export default {
       searchBy: "",
       searchFilter: "",
       searchByFilter: "",
-      sortBy: "",
+      sortBy: [],
       valid: true,
       descending: false,
       waitDialog: false,
@@ -745,20 +752,20 @@ export default {
     headers() {
       return [
         {
-          text: "Policy Number",
-          value: "policyNumber",
+          title: "Policy Number",
+          key: "policyNumber",
           filterable: false,
           width: 50,
         },
         {
-          text: "Policy Type",
-          value: "policyType",
+          title: "Policy Type",
+          key: "policyType",
           filterable: false,
           width: 50,
         },
         {
-          text: "Policy Description",
-          value: "policyShortDescription",
+          title: "Policy Description",
+          key: "policyShortDescription",
           filterable: false,
           width: 75,
         },
@@ -769,52 +776,52 @@ export default {
         //   width: 40
         // },
         {
-          text: "Emp ID",
-          value: "employeeId",
+          title: "Emp ID",
+          key: "employeeId",
           filterable: false,
           width: 50,
         },
         {
-          text: "Employee Name",
-          value: "name",
+          title: "Employee Name",
+          key: "name",
           filterable: false,
           width: 115,
         },
         {
-          text: "Insured Name",
-          value: "insuredName",
+          title: "Insured Name",
+          key: "insuredName",
           filterable: false,
           width: 115,
         },
-        { text: "Due Date", value: "dueDate", filterable: false, width: 50 },
+        { title: "Due Date", key: "dueDate", filterable: false, width: 50 },
         {
-          text: "Premium Deducted",
-          value: "premiumDeducted",
+          title: "Premium Deducted",
+          key: "premiumDeducted",
           filterable: false,
           width: 50,
         },
         {
-          text: "Total Premium",
-          value: "totalPremium",
+          title: "Total Premium",
+          key: "totalPremium",
           filterable: false,
           width: 50,
         },
 
         {
-          text: "Change Reason",
-          value: "changeCode",
+          title: "Change Reason",
+          key: "changeCode",
           filterable: false,
           width: 50,
         },
         {
-          text: "Adjusted Amount",
-          value: "adjustedAmount",
+          title: "Adjusted Amount",
+          key: "adjustedAmount",
           filterable: false,
           width: 50,
         },
         {
-          text: "Total After Adjustment",
-          value: "totalAfterAdjustment",
+          title: "Total After Adjustment",
+          key: "totalAfterAdjustment",
           filterable: false,
           width: 75,
         },
@@ -918,9 +925,9 @@ export default {
           let newItem = {};
 
           for (let j = 0; j < headers.length; j++) {
-            let value = items[i][headers[j].value];
+            let value = items[i][headers[j].key];
 
-            switch (headers[j].value) {
+            switch (headers[j].key) {
               case "changeCode":
                 value = exportInvoice.crosswalkChangeCode(value);
                 break;
@@ -933,7 +940,7 @@ export default {
               //   break;
             }
 
-            newItem[headers[j].value] = value;
+            newItem[headers[j].key] = value;
           }
 
           newItem.invoiceId = items[i].invoiceId;
@@ -1000,4 +1007,5 @@ export default {
 .bottomMargin {
   margin-bottom: 30px;
 }
+
 </style>

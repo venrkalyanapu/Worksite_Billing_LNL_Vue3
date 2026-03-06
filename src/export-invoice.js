@@ -1,6 +1,7 @@
 import jsPDF from "jspdf";
 import "../ocr-aregular-normal.js";
 import "jspdf-autotable";
+import { applyPlugin } from 'jspdf-autotable'
 
 import dateFormat from "dateformat";
 
@@ -13,6 +14,9 @@ import { HTTP_Excel } from "@/HTTP-common.js";
 import {store} from "@/store.js";
 import eventBus from "@/event-bus.js";
 import {createApp} from "vue";
+import { globalProperties } from './main.js'; 
+import glLnlSmBlue from '@/assets/glLnlSmBlue.png';
+applyPlugin(jsPDF);
 
 export default {
   listHistDetailItems: [],
@@ -96,9 +100,11 @@ export default {
       width: 75,
     },
   ],
+
   invoiceHistory: store.state.invoiceHistory,
   mainColor: store.state.mainColor,
   dueDate: "",
+
   discrepancyNote : "Note: - Adjustment details are only available for online payments",
   adjustmentCodes : [
     { changeCode : `C`, description : `Cancel` },
@@ -211,11 +217,10 @@ export default {
   generateInvoice(invoice, exportForm) {
     this.invoiceId = invoice.invoiceId;
     this.invoiceStatus = invoice.invoiceStatus;
-
     HTTP.get("InvoiceHistory/GetInvoiceHistoryDetails", {
       params: {
         invoiceId: this.invoiceId,
-      },
+      }
     })
       .then((response) => {
         if (response.status != 200) {
@@ -224,9 +229,10 @@ export default {
 
             "export-invoice.js generateInvoice InvoiceHistory/GetInvoiceHistoryDetails response"
           );
-          eventBus.$emit("errDialog");
+          eventBus.emit("errDialog");
         } else {
           try {
+           
             this.listHistDetailItems = response.data.invoicesDetails;
 
             HTTP.get("InvoiceHistory/GetInvoiceAdditionalDetails", {
@@ -240,15 +246,15 @@ export default {
                     response.statusText,
                     "export-invoice.js generateInvoice InvoiceHistory/GetInvoiceAdditionalDetails response"
                   );
-                  eventBus.$emit("errDialog");
+                  eventBus.emit("errDialog");
                 } else {
                   try {
                     this.additionalDetails = response.data.additionalDetails[0];
 
                     if (exportForm === 1) this.generateExcel();
-                    else this.generatePDF();
+                    else this.generatePDF(); 
                   } catch (e) {
-                    eventBus.$emit("errDialog");
+                    eventBus.emit("errDialog");
                     Log.logError(
                       e,
                       "export-invoice.js generateInvoice InvoiceHistory/GetInvoiceAdditionalDetails response"
@@ -261,10 +267,10 @@ export default {
                   e,
                   "export-invoice.js generateInvoice InvoiceHistory/GetInvoiceAdditionalDetails"
                 );
-                eventBus.$emit("errDialog");
+                eventBus.emit("errDialog");
               });
           } catch (e) {
-            eventBus.$emit("errDialog");
+            eventBus.emit("errDialog");
             Log.logError(
               e,
               "export-invoice.js generateInvoice InvoiceHistroy/GetInvoiceHistoryDetails"
@@ -273,7 +279,7 @@ export default {
         }
       })
       .catch((e) => {
-        eventBus.$emit("errDialog");
+        eventBus.emit("errDialog");
 
         Log.logError(e, "export-invoice.js generateInvoice");
       });
@@ -301,7 +307,7 @@ export default {
               totalsArray.push("");
             }
 
-            totalsArray.push(createApp.options.filters.money(adjAmt.toString()));
+            totalsArray.push(globalProperties.$filters.money(adjAmt.toString()));
             result.push(totalsArray);
           }
 
@@ -323,7 +329,7 @@ export default {
         totalsArray.push("");
       }
 
-      totalsArray.push(createApp.options.filters.money(adjAmt.toString()));
+      totalsArray.push(globalProperties.$filters.money(adjAmt.toString()));
       result.push(totalsArray);
     } catch (e) {
       Log.logError(e, "export-invoice.js generateData");
@@ -389,7 +395,7 @@ export default {
 
           switch (headers[j].value) {
             case "dueDate":
-              value = createApp.options.filters.mdyyyy(value);
+              value = globalProperties.$filters.mdyyyy(value);
               break;
 
             case "changeCode":
@@ -400,7 +406,7 @@ export default {
             case "totalPremium":
             case "totalAfterAdjustment":
             case "premiumDeducted":
-              value = createApp.options.filters.money(value);
+              value = globalProperties.$filters.money(value);
               break;           
 
             // case "employeeId":
@@ -424,18 +430,21 @@ export default {
   generatePDF() {
     try {
       var doc = new jsPDF("l", "pt", "a4");
-
+let finalY = 0;
       let formattedData = this.formatDataPDF(
         this.headers,
         this.listHistDetailItems
       );
       let pdfData = this.generateData(this.headers, formattedData);
+     
       let pdfHeaders = this.createHeaders(this.headers);
+      
       let newPdfData = this.filterPdfHeader(pdfHeaders, pdfData);
+    
       pdfData = newPdfData;
 
       let logo = new Image();
-      logo.src = require("@/assets/glLnlSmBlue.png");
+      logo.src = glLnlSmBlue;
 
       doc.addImage(logo, "PNG", 50, 50, 200, 40);
 
@@ -445,7 +454,8 @@ export default {
       doc.setFontSize("12");
 
       let paidOrDue = "Total Amount Paid: ";
-      let paidOrDueAmt = createApp.options.filters.money(
+
+      let paidOrDueAmt = globalProperties.$filters.money(
         this.additionalDetails.paymentAmount
       );
 
@@ -453,12 +463,12 @@ export default {
 
       if (this.invoiceStatus.toLowerCase() != "paid") {
         paidOrDue = "Total Amount Due: ";
-        paidOrDueAmt = createApp.options.filters.money(totalDue);
+        paidOrDueAmt = globalProperties.$filters.money(totalDue);
       }
 
       let totalBilled = this.totalBilled();
       let totalAdjusted = this.totalAdjusted();
-      
+     
       //PCR #11
       let displayTotalAdjusted = totalAdjusted;
       let detailsAdjustSum = 0;
@@ -483,8 +493,8 @@ export default {
 
       doc.text(
         [
-          createApp.options.filters.mdyyyy(this.dueDate),
-          createApp.options.filters.mdyyyy(this.additionalDetails.delinquentDate),
+          globalProperties.$filters.mdyyyy(this.dueDate),
+          globalProperties.$filters.mdyyyy(this.additionalDetails.delinquentDate),
         ],
         150,
         175,
@@ -497,9 +507,9 @@ export default {
 
       doc.text(
         [
-          createApp.options.filters.money(totalBilled),
+          globalProperties.$filters.money(totalBilled),
           //createApp.options.filters.money(totalAdjusted),
-          createApp.options.filters.money(displayTotalAdjusted),
+          globalProperties.$filters.money(displayTotalAdjusted),
         ],
         450,
         175,
@@ -534,7 +544,6 @@ export default {
         doc.text(store.state.currentFranchise.franchiseCSZ, 550, 110);
       }
 
-
       if (hasDiscrepancy) {
         doc.setFont("helvetica", "bold");
         doc.setFontSize("10");
@@ -545,7 +554,7 @@ export default {
         );
       }
 
-      finalY = 250;
+    finalY = 250;
 
       // begin tear-away
 
@@ -559,7 +568,6 @@ export default {
           150,
           finalY + 10
         );
-
         doc.setLineDash([10, 10], 0);
         doc.line(20, finalY + 20, 820, finalY + 20);
         doc.setLineDash(0);
@@ -588,15 +596,15 @@ export default {
         doc.setFontSize("12");
 
         doc.text(
-          createApp.options.filters.mdyyyy(this.additionalDetails.delinquentDate),
+          globalProperties.$filters.mdyyyy(this.additionalDetails.delinquentDate),
           605,
           finalY + 170
         );
-        doc.text(createApp.options.filters.mdyyyy(this.dueDate), 480, finalY + 170);
+        doc.text(globalProperties.$filters.mdyyyy(this.dueDate), 480, finalY + 170);
 
         doc.setFont("helvetica", "bold");
         doc.setFontSize("14");
-        doc.text(createApp.options.filters.money(totalDue), 640, finalY + 210);
+        doc.text(globalProperties.$filters.money(totalDue), 640, finalY + 210);
         doc.setFont("helvetica", "normal");
         doc.setFontSize("12");
 
@@ -605,7 +613,6 @@ export default {
           610,
           finalY + 115
         );
-
         if (this.additionalDetails.branchID)
           doc.text(this.additionalDetails.branchID.trim(), 495, finalY + 115);
 
@@ -637,7 +644,6 @@ export default {
         } else {
           doc.text(store.state.currentFranchise.franchiseCSZ, 75, finalY + 120);
         }
-
         doc.setDrawColor(0);
         doc.setFillColor(0, 0, 0);
         doc.rect(420, finalY + 240, 347, 20, "F");
@@ -653,7 +659,6 @@ export default {
 
         doc.setFont("ocr-aregular", "normal");
         doc.setFontSize(14);
-
         if (
           this.additionalDetails.pdfMICRLine &&
           this.additionalDetails.pdfMICRLine != ""
@@ -661,11 +666,9 @@ export default {
           doc.text(this.additionalDetails.pdfMICRLine, 450, finalY + 285);
 
         finalY += 285;
-
       }
 
       // end tear away
-
       let pageNumber = 1;
       let chunkSize = 11;
 
@@ -702,7 +705,7 @@ export default {
           { align: "left" }
         );
         doc.text("Due Date: ", 40, 65);
-        doc.text(createApp.options.filters.mdyyyy(this.dueDate), 125, 65, {
+        doc.text(globalProperties.$filters.mdyyyy(this.dueDate), 125, 65, {
           align: "left",
         });
 
@@ -714,7 +717,6 @@ export default {
 
         doc.setFont("helvetica", "normal");
         doc.setFontSize("11");
-
         doc.autoTable({
           theme: "striped",
           styles: { fontSize: 9 },
@@ -740,7 +742,7 @@ export default {
         });
       }
 
-      let finalY = doc.lastAutoTable.finalY;
+       finalY = doc.lastAutoTable.finalY;
 
       doc.save(
         "InvoiceView_" +
@@ -868,7 +870,7 @@ export default {
 
           switch (headers[j].value) {
             case "dueDate":
-              value = createApp.options.filters.mdyyyy(value);
+              value = globalProperties.$filters.mdyyyy(value);
               break;
 
             case "changeCode":
@@ -879,7 +881,7 @@ export default {
             case "premiumDeducted":
             case "totalAfterAdjustment":
             case "totalPremium":
-              value = createApp.options.filters.money(value);
+              value = globalProperties.$filters.money(value);
               break;
             // case "isSection125":
             //   value = createApp.options.filters.boolYesNo(value);
@@ -909,7 +911,7 @@ export default {
               totalsItem[headers[x].value] = "";
             }
 
-            totalsItem["totalByEmployee"] = createApp.options.filters.money(
+            totalsItem["totalByEmployee"] = globalProperties.$filters.money(
               adjAmt.toString()
             );
             dataArray.push(totalsItem);
@@ -929,7 +931,7 @@ export default {
         totalsItem[headers[x].value] = "";
       }
 
-      totalsItem["totalByEmployee"] = createApp.options.filters.money(
+      totalsItem["totalByEmployee"] = globalProperties.$filters.money(
         adjAmt.toString()
       );
 
@@ -958,9 +960,9 @@ export default {
       if (item.totalAfterAdjustment) totalAfterAdjustment += parseFloat(item.totalAfterAdjustment);
     }    
     lastTotalsItem["policyNumber"] = "Totals";    
-    lastTotalsItem["premiumDeducted"] = createApp.options.filters.money(totalDeducted.toString());
-    lastTotalsItem["totalPremium"] = createApp.options.filters.money(totalPremium.toString());
-    lastTotalsItem["totalAfterAdjustment"] = createApp.options.filters.money(totalAfterAdjustment.toString());
+    lastTotalsItem["premiumDeducted"] = globalProperties.$filters.money(totalDeducted.toString());
+    lastTotalsItem["totalPremium"] = globalProperties.$filters.money(totalPremium.toString());
+    lastTotalsItem["totalAfterAdjustment"] = globalProperties.$filters.money(totalAfterAdjustment.toString());
     lastTotalsItem["totalByEmployee"] = "";
   return lastTotalsItem;
   },
@@ -982,24 +984,24 @@ export default {
   },
   generateExcel() {
     try {
-      eventBus.$emit("excelWait");
+      eventBus.emit("excelWait");
 
       let paidOrDelinquent =
         "Invoice Paid Date: " +
-        createApp.options.filters.mdyyyy(this.additionalDetails.paymentDate);
+        globalProperties.$filters.mdyyyy(this.additionalDetails.paymentDate);
 
       let paidOrDue =
         "Total Amount Paid: " +
-        createApp.options.filters.money(this.additionalDetails.paymentAmount);
+        globalProperties.$filters.money(this.additionalDetails.paymentAmount);
 
       let totalDue = this.totalDue();
 
       if (this.invoiceStatus.toLowerCase() != "paid") {
         paidOrDelinquent =
           "Invoice Delinquent Date: " +
-          createApp.options.filters.mdyyyy(this.additionalDetails.delinquentDate);
+          globalProperties.$filters.mdyyyy(this.additionalDetails.delinquentDate);
 
-        paidOrDue = "Total Amount Due: " + createApp.options.filters.money(totalDue);
+        paidOrDue = "Total Amount Due: " + globalProperties.$filters.money(totalDue);
       }
 
       let totalBilled = this.totalBilled();
@@ -1057,7 +1059,7 @@ export default {
             },
             {
               row:
-                "Invoice Due Date: " + createApp.options.filters.mdyyyy(this.dueDate),
+                "Invoice Due Date: " + globalProperties.$filters.mdyyyy(this.dueDate),
               style: "bold",
             },
             {
@@ -1068,13 +1070,13 @@ export default {
             {
               row:
                 "Total Amount Billed: " +
-                createApp.options.filters.money(totalBilled),
+                globalProperties.$filters.money(totalBilled),
               style: "bold",
             },
             {
               row:
                 "Total Amount Adjusted: " +
-                createApp.options.filters.money(displayTotalAdjusted),
+                globalProperties.$filters.money(displayTotalAdjusted),
               style: "bold",
             },
             { row: paidOrDue, style: "bold" },
@@ -1113,7 +1115,7 @@ export default {
             fileLink.setAttribute("download", invoice_body.fileName + ".xlsx");
             document.body.appendChild(fileLink);
 
-            eventBus.$emit("excelDone");
+            eventBus.emit("excelDone");
 
             if (window.navigator && window.navigator.msSaveOrOpenBlob) {
               window.navigator.msSaveOrOpenBlob(
@@ -1124,8 +1126,8 @@ export default {
               fileLink.click();
             }
           } catch (e) {
-            eventBus.$emit("excelDone");
-            eventBus.$emit("errDialog");
+            eventBus.emit("excelDone");
+            eventBus.emit("errDialog");
 
             Log.logError(
               e,
@@ -1135,14 +1137,14 @@ export default {
           }
         })
         .catch((e) => {
-          eventBus.$emit("excelDone");
-          eventBus.$emit("errDialog");
+          eventBus.emit("excelDone");
+          eventBus.emit("errDialog");
 
           Log.logError(e, "export-invoice.js generateExcel export/invoice");
         });
     } catch (e) {
-      eventBus.$emit("excelDone");
-      eventBus.$emit("errDialog");
+      eventBus.emit("excelDone");
+      eventBus.emit("errDialog");
 
       Log.logError(e, "export-invoice.js generateExcel");
     }
