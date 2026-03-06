@@ -1,5 +1,5 @@
 <template>
-  <v-row align="center" justify="center" wrap>
+  <v-row align="center" justify="center" wrap style="position:sticky !important">
     <v-col col="12" class="padding">
       <InvHist />
     </v-col>

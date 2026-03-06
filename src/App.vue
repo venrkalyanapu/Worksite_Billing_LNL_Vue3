@@ -173,7 +173,7 @@
           </template>
           <template v-else>
             <v-col :cols="12">
-              <router-view
+              <router-view style="position: unset !important"
                 :class="
                   $vuetify.display.mdAndUp ? 'routerView' : 'routerViewSm'
                 "

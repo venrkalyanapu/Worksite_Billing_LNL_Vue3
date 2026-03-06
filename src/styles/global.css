@@ -189,7 +189,12 @@ table tbody tr:hover th {
 .theme--dark.v-data-table tbody td {
   border-bottom: none !important;
 }
-
+.v-data-table tbody td:not(:last-child) {
+  border-right: 2px solid rgb(216, 216, 216);
+}
+.v-data-table tbody td {
+  border-bottom: none !important;
+}
 th {
   /* background-color: #00558c; */
   background-color: #44aba8;

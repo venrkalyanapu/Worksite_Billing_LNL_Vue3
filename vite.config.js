@@ -60,6 +60,9 @@ export default defineConfig({
    },
 },
   server: {
-    port: 3000,
+    client: {
+      overlay: false, // Disables the development server error overlay
+    },
+    port: 8080,
   },
 })

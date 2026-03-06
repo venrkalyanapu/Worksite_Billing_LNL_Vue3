@@ -21,7 +21,7 @@ import { useCookies } from "vue3-cookies";
 import { VueMaskDirective } from 'v-mask'
 import '@mdi/font/css/materialdesignicons.css' 
 import dateFormat from "dateformat";
-
+import 'vuetify/styles'
  
 // Styles
 
@@ -43,7 +43,7 @@ app.use(vuetify);
 app.directive('mask', VueMaskDirective); 
 app.mount('#app');
 const { cookies } = useCookies();
-
+export const globalProperties = app.config.globalProperties;
 //createApp(App).use(store).mount('#app')
 
 app.config.globalProperties.$filters = {

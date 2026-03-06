@@ -11,12 +11,12 @@
         <div>
         <span
             :class="
-            $vuetify.breakpoint.smAndDown
+            $vuetify.display.smAndDown
                 ? 'waitCircleLoginSm'
                 : 'waitCircleLogin'
             "
             :style="
-            $vuetify.breakpoint.smAndDown
+            $vuetify.display.smAndDown
                 ? 'width:100%; color: #319B42;'
                 : 'width: 25%; color: #319B42;'
             "
@@ -151,7 +151,7 @@ export default {
                     this.isAuthenticated = false;
                     this.setErrorMessages("You are not authenticated to access this page.");
                 }
-                      this.emit('AuthenticatedStatusChange', this.isAuthenticated);
+                      this.$emit('AuthenticatedStatusChange', this.isAuthenticated);
             }).catch(error => { this.waiting = false; alert(error)});
         },
     }    

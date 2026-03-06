@@ -28,13 +28,13 @@ export default {
           title: "Due Date",
           align: "left",
           sortable: true,
-          name: "dueDate"
+          key: "dueDate"
         },
         // { text: "Due Date", value: "dueDate" },
-        { title: "Status", name: "statusCode" },
-        { title: "Amount Billed", name: "amountBilled" },
-        { title: "Adjustmnts", name: "adjustments" },
-        { title: "Adjusted Total", name: "adjustedTotal" }
+        { title: "Status", key: "statusCode" },
+        { title: "Amount Billed", key: "amountBilled" },
+        { title: "Adjustmnts", key: "adjustments" },
+        { title: "Adjusted Total", key: "adjustedTotal" }
 
         //{ type: "checkbox", class: "checkbox-class" }
         //,
