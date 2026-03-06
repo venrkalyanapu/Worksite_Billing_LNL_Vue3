@@ -6,9 +6,11 @@ import "vuetify/dist/vuetify.min.css";
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+import { VMaskInput } from 'vuetify/labs/VMaskInput'
 
-// https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export const vuetify = createVuetify({
-  components,
+  components: {
+    VMaskInput,    
+  },
   directives,
 })

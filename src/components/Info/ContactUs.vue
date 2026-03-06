@@ -1,17 +1,17 @@
 <template>
   <span id="contactUs">
     <div>
-      <v-container justify="center" align-content="center">
-      <v-row>
+      <v-row justify="center" align-content="center" style="position:sticky !important;">
         <v-col cols="10">
           <v-card class="mx-auto">
-            <header
-              class="px-2 py-3 v-sheet v-sheet--tile theme--dark v-toolbar v-toolbar--flat tbBackground"
-            >
-              <v-row style="padding-top: 15px; padding-left: 20px">
-                <b><span style="font-size: 25px">Contact Us</span></b>
-              </v-row>
-            </header>
+             <v-toolbar density="compact" flat color="secondary"class="tbBackground px-4 py-3">
+              <v-col class="d-flex align-center">
+                <span class="font-weight-bold" style="font-size: 25px;">
+                  Contact Us
+                </span>
+              </v-col>
+              </v-toolbar>
+          
             <br />
             <v-alert text color="success" v-if="showSuccessMessages">
               <v-row class="success-message">
@@ -23,94 +23,107 @@
               </v-row>
             </v-alert>
 
-            <v-alert text color="warning" v-if="showErrorMessages">
-              <v-row class="error-message">
-                <ul id="errorMessage">
-                  <li v-for="message in errorMessages" v-bind:key="message">
-                    {{ message }}
-                  </li>
-                </ul>
-              </v-row>
+          
+
+           <v-alert overlap transition="fade-transition" text color="warning" variant="tonal" v-if="showErrorMessages">
+                <!-- <v-row class="error-message" > -->
+                    <ul id="errorMessage" style="padding-left:20px;color:red;font-size:16px;">
+                        <li v-for="message in errorMessages" v-bind:key="message">
+                            {{ message }}
+                        </li>
+                    </ul>
+                <!-- </v-row> -->
             </v-alert>
-            <v-container justify="center" align-content="center" row>
-              <v-row cols="9">
-                <v-form ref="form" v-model="valid" lazy-validation>
-                  <v-row cols="25" sm="15" md="8">
+            
+            <v-row justify="center" align-content="center"  >
+              <v-col cols="10" sm="10" md="10" class="mx-auto mt-6 px-8" >
+                <v-form ref="form" v-model="valid" lazy-validation style="margin-left:60px !important;; margin-right:60px !important;">
+                  <v-row  style="padding-bottom: 5px;">
                     <v-text-field
+                   
                       v-model="companyName"
                       :rules="companyNameRules"
                       label="*Company Name"
-                      dense
-                      outlined
+                      density="compact"
+                       variant="outlined"
+                     color="primary"
                       autocomplete="companyName"
                       ref=""
+                      style="padding-bottom: 5px;"
+                      class="custom-validation"
                     ></v-text-field>
                   </v-row>
 
-                  <v-row cols="25" sm="15" md="8">
-                    <v-text-field
+                  <v-row>
+                    <v-text-field style="padding-bottom: 5px;"
                       v-model="companyNumber"
                       :rules="companyNumberRules"
                       label="*Account Number"
-                      dense
-                      outlined
+                      density="compact"
+                       variant="outlined"
+                     color="primary"
                       autocomplete="companyNumber"
                       ref=""
                     ></v-text-field>
                   </v-row>
 
-                  <v-row cols="50" sm="15" md="8">
-                    <v-text-field
+                  <v-row>
+                    <v-mask-input
                       v-model="phone"
                       :rules="phoneRules"
-                      v-mask="'(###) ###-####'"
+                      mask="(###) ###-####"
                       label="*Telephone"
-                      dense
-                      outlined
+                      density="compact"
+                       variant="outlined"
+                     color="primary"
                       autocomplete="phone"
-                      ref=""
-                    ></v-text-field>
+                      persistent-placeholder
+                    ></v-mask-input>
+                    
                   </v-row>
 
-                  <v-row cols="50" sm="15" md="8">
-                    <v-text-field
+                  <v-row>
+                    <v-text-field style="padding-bottom: 5px;"
                       v-model="emailAddress"
                       :rules="emailAddressRules"
                       label="*Email Address"
-                      dense
-                      outlined
+                      density="compact"
+                       variant="outlined"
+                     color="primary"
                       autocomplete="emailAddress"
                       ref=""
                     ></v-text-field>
                   </v-row>
 
-                  <v-row cols="50" sm="15" md="8">
-                    <v-select
+                  <v-row>
+                    <v-select style="padding-bottom: 5px;"
                       v-model="subject"
                       :items="comments"
                       label="*Subject"
                       :rules="subjectRules"
-                      dense
-                      outlined
+                      density="compact"
+                       variant="outlined"
+                     color="primary"
                       required
                     ></v-select>
                   </v-row>
-                  <v-row cols="50" sm="15" md="8">
-                    <v-textarea
+                  <v-row>
+                    <v-textarea style="padding-bottom: 5px;"
                       multi-line
                       v-model="question"
                       :rules="questionRules"
                       label="*Question/Comments"
-                      dense
-                      outlined
+                      density="compact"
+                       variant="outlined"
+                     color="primary"
                       rows="5"
                       autocomplete="question"
                       ref=""
                     ></v-textarea>
                   </v-row>
 
-                  <v-row cols="9">
-                    <v-container justify="center">
+                  <v-col cols="9">
+                    <v-row justify="center" class="mb-12">
                       <v-btn
                         color="#319B42"
                         dark
@@ -119,17 +132,19 @@
                         @click.stop="validate"
                         >Submit</v-btn
                       >
-                    </v-container>
-                  </v-row>
+                    </v-row>
+                  </v-col>
                 </v-form>
-              </v-row>
-            </v-container>
+              </v-col>
+            </v-row>
             <br />
             <br />
+            
           </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
+         <div class="py-8"></div>
+        </v-col>
+        
+      </v-row>
     </div>
     <div>
       <span
@@ -144,7 +159,7 @@
             : 'width: 25%; color: #319B42;'
         "
       >
-        <v-container justify="center" align-content="center" align="center" column>
+        <v-row justify="center" align-content="center" align="center" column>
           <v-progress-circular
             v-if="waiting"
             indeterminate
@@ -154,7 +169,7 @@
           ></v-progress-circular>
           <br />
           <span class="status" v-if="waiting">{{ statusText }}</span>
-        </v-container>
+        </v-row>
       </span>
     </div>
   </span>
@@ -286,18 +301,22 @@ export default {
         }
       });
     },
+  async validate() {
+  try {
+    const { valid } = await this.$refs.form.validate();
 
-    validate() {
-      try {
-        if (this.$refs.form.validate()) {
+    if (!valid) {
+      
+      return; 
+    }
           this.statusText = "submitting...";
           this.waiting = true;
           this.showSuccessMessages = false;
           this.showErrorMessages = false;
           this.successMessages = [];
 
-          HTTP_Notify.get("NonCCMNotification/WorkSiteContactUSEmail", {
-            params: {
+    HTTP_Notify.get("NonCCMNotification/WorkSiteContactUSEmail", {
+      params: {
               companyName: this.companyName,
               companyId: this.companyNumber,
               phone: this.phone.replace(/[{()}]/g, '').replace(/\s/g, '').replace(/-/g, '').trim(),
@@ -305,40 +324,29 @@ export default {
               subject: this.subject,
               comments: this.question,
             },
-            //withCredentials: true
-          })
-            .then((response) => {
-              let responseData = response.data;
-
-              try {
-                if (responseData == "Successfully submitted") {
-                  this.setSuccessMessages(
-                    "Information has been submitted successfully."
-                  );
-                } else {
-                  this.setErrorMessages(
-                    "Company Information has been not submitted, please check with administrator."
-                  );
-                }
-                this.waiting = false;
-              } catch (e) {
-                Log.logError(e, "ContactUs.vue validate");
-                this.searching = false;
-              }
-            })
-            .catch((e) => {
-              Log.logError(e, "ContactUs.vue validate (1)");
-              this.setErrorMessages(
-                "Company Information has been not submitted, please check with administrator."
-              );
-            });
-          this.waiting = true;
-        }
-      } catch (e) {
-        Log.logError(e, "ContactUs.vue validate (2)");
-        this.searching = false;
+    })
+    .then((response) => {
+      if (response.data === "Successfully submitted") {
+        this.setSuccessMessages("Information has been submitted successfully.");
+      } else {
+        // ONLY show this if the server actually rejects the data
+        this.setErrorMessages("Company Information was not submitted, please check with administrator.");
       }
-    },
+    })
+    .catch((e) => {
+      Log.logError(e, "ContactUs.vue validate (1)");
+      this.setErrorMessages("Company Information was not submitted, please check with administrator.");
+    })
+    .finally(() => {
+      this.waiting = false;
+    });
+
+  } catch (e) {
+    Log.logError(e, "ContactUs.vue validate (2)");
+    this.waiting = false;
+  }
+}
+,
   },
 
   created() {
@@ -382,6 +390,14 @@ export default {
   position: fixed;
   top: 25%;
   left: 0%;
+}
+:deep(.v-messages__message) {
+  text-align: left; 
+}
+
+:deep(.v-input__details) {
+  padding-inline-start: 10px !important; 
+  margin-inline-start: 0px !important;
 }
 </style>
 
