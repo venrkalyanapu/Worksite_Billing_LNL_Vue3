@@ -1,6 +1,6 @@
 <template>
   <span>
-    <v-breadcrumbs :items="breadcrumbItems"></v-breadcrumbs>
+    <v-breadcrumbs :items="breadcrumbItems" style="color:#1976d2"></v-breadcrumbs>
     <br />
 
     <br />
@@ -9,11 +9,11 @@
       v-model="valid"
       style="padding-bottom:0px !important; margin-bottom:0px !important;"
     >
-      <v-layout
-        align-content-center
-        align-center
-        justify-center
-        v-if="$vuetify.breakpoint.mdAndUp"
+      <v-row
+         justify="center" 
+          align="center" 
+          align-content="center"
+        v-if="$vuetify.display.mdAndUp"
         row
       >
         <v-col
@@ -66,12 +66,12 @@
           color='#319B42'
           @click.stop="resetInvoices"
         >Reset</v-btn>
-      </v-layout>
-      <v-layout
-        align-content-center
-        align-center
-        justify-center
-        v-if="$vuetify.breakpoint.smAndDown"
+      </v-row>
+      <v-row
+        align-content="center"
+        align="center"
+        justify="center"
+        v-if="$vuetify.display.smAndDown"
       >
         <v-container>
           <v-row>
@@ -119,10 +119,10 @@
             </v-col>
           </v-row>
         </v-container>
-      </v-layout>
+      </v-row>
     </v-form>
-    <v-layout justify-center align-content-center align-center>
-      <v-flex xs11>
+    <v-row justify="center" align="center" align-content="center">
+      <v-col cols="11">
         <v-data-table
           :headers="headers"
           :items="filteredItems"
@@ -151,10 +151,10 @@
 
           <template v-slot:footer.page-text="{pageStart, pageStop, itemsLength}">
             <div
-              :class="$vuetify.breakpoint.smAndDown?'v-data-footer__select smallFooter':'v-data-footer__select'"
+              :class="$vuetify.display.smAndDown?'v-data-footer__select smallFooter':'v-data-footer__select'"
             >
               <span
-                v-if="$vuetify.breakpoint.mdAndUp"
+                v-if="$vuetify.display.mdAndUp"
               >Viewing items: {{ pageStart }}-{{ pageStop }} of {{ itemsLength }}</span>
               <span style="margin-left: 10px;">Page:&nbsp;</span>
               <v-select
@@ -170,8 +170,8 @@
             </div>
           </template>
         </v-data-table>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
     <br />
     <br />
     <br />
@@ -182,9 +182,9 @@
           <span>Unlock Invoice</span>
         </v-card-title>
 
-        <v-layout align-center justify-center>
+        <v-row align="center"  justify="center">
           <hr width="90%" />
-        </v-layout>
+        </v-row>
         <br />
         <v-card-text>You are about to unlock invoice {{ selected.invoiceId }} for account {{ selected.franchiseId }}. Do you want to clear all adjustments for the invoice or retain them?</v-card-text>
 
@@ -225,9 +225,9 @@
           <span>Invoice Unlocked</span>
         </v-card-title>
 
-        <v-layout align-center justify-center>
+        <v-row align="center"  justify="center">
           <hr width="90%" />
-        </v-layout>
+        </v-row>
         <br />
         <v-card-text>Invoice {{ selected.invoiceId }} for account {{ selected.franchiseId }} is now unlocked.</v-card-text>
         <v-card-actions>
@@ -261,7 +261,7 @@
     </v-dialog>
     <v-progress-circular
       v-if="waitCircle"
-      :class="$vuetify.breakpoint.smAndDown ? 'waitCircleSm' : 'waitCircle'"
+      :class="$vuetify.display.smAndDown ? 'waitCircleSm' : 'waitCircle'"
       indeterminate
       color="#319B42"
       :size="70"
@@ -282,14 +282,14 @@ export default {
       selected: {},
       breadcrumbItems: [
         {
-          text: "Home Office",
+          title: "Home Office",
           disabled: false,
-          href: "HOLanding",
+          to: "HOLanding",
         },
         {
-          text: "Account Maintenance",
+          title: "Account Maintenance",
           disabled: false,
-          href: "HOSystemTools",
+          to: "HOSystemTools",
         },        
         {
           text: "Reconcile & Pay Lock Settings",
