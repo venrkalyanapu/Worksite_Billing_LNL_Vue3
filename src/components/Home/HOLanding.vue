@@ -18,7 +18,7 @@
 
         <v-row no-gutters class="mb-6" v-if="showInvoiceHome">
         <v-col :cols="$vuetify.display.smAndDown?2:1">
-            <v-img :src="require('@/assets/pay.png')" width="48" height="48" contain></v-img>
+            <v-img :src="payimage" width="48" height="48" contain></v-img>
         </v-col>
         <v-col>
             <h2 class="menuHeaders">Invoice Home</h2>
@@ -59,7 +59,10 @@
     </v-row>
   </div>
 </template>
+<script setup>
+import payimage from '@/assets/pay.png';</script>
 <script>
+
 import permissions from "@/permissions.js";
 export default {
   name: "HOLanding",

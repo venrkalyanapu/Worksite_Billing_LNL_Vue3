@@ -141,17 +141,17 @@
       <v-dialog v-model="pinCodeDialog" max-width="550" persistent>
           <v-form ref="pincodeform" >
             <v-card>
-              <v-card-title class="px-2 py-3 v-sheet v-sheet--tile theme--dark v-toolbar v-toolbar--flat tbBackground">
+              <v-card-title style="color:white" class="px-2 py-3 v-sheet v-sheet--tile theme--dark v-toolbar v-toolbar--flat tbBackground">
                 One-Time Code
               </v-card-title>
               <v-card-text>
                 <!-- <span style="margin-left: 15px;"><b>{{ pinCodeStatus }}</b></span> -->
                 <br/>
-                  <div style="margin-left: 15px;"><b>{{ messageType() }}, please check it for your one-time code.</b></div>
+                  <div class = "OTPSubtitle" style="margin-left: 15px;color:rgba(0,0,0,.6)"><b>{{ messageType() }}, please check it for your one-time code.</b></div>
                   <v-container grid-list-md text-xs-center>
                     <v-row row wrap>
                       <v-col cols="9">
-                        <v-text-field label="*one-time code" v-model="pincode" outlined single-line v-mask="'######'" autofocus :rules="pinCodeRules"
+                        <v-text-field label="*one-time code" v-model="pincode" variant="outlined" color="primary" single-line v-mask="'######'" autofocus :rules="pinCodeRules"
                          v-on:keypress.enter.prevent hide-spin-buttons />
                       </v-col>
                     <v-col cols="3">
@@ -1098,5 +1098,12 @@ input:-internal-autofill-selected {
 }
 .button-like .v-input__slot * {
   cursor: pointer !important;
+}
+.OTPSubtitle{
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.375rem;
+    letter-spacing: .0071428571em;
+    color: rgba(0, 0, 0, .6);
 }
 </style>

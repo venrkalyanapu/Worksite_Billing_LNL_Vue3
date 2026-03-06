@@ -1,37 +1,46 @@
 <template>
   <span>
-    <v-breadcrumbs :items="breadcrumbItems"></v-breadcrumbs>
-    <v-form ref="form">
+    <v-breadcrumbs :items="breadcrumbItems" style="color:#1976d2">
+       <template v-slot:title="{ item }">
+      {{ item.text }}
+    </template>
+    </v-breadcrumbs>
+    <v-form ref="form" style="position:sticky !important;margin-left: 40px !important;">
       <v-row>
         <v-layout
-          align-content-center
-          align-center
-          justify-center
+          align-content="center"
+          align="center"
+          justify="center"
         >
           <v-col lg="3" xl="3" md="4" sm="4">
             <v-text-field
               v-model="searchFor"
-              solo
+              variant="solo"
+                rounded
               label="Search for..."
               class="roundedTextBox search-text-box"
               append-icon="search"
+              append-inner-icon="mdi-magnify"
+             
             />
           </v-col>
-          <v-col lg="1" xl="1" md="1" sm="1" align="right">
+          <v-col lg="1" xl="1" md="1" sm="1" align="right" style="margin-top:50px !important;">
             <span>by</span>
           </v-col>
           <v-col lg="3" xl="3" md="3" sm="4">
             <v-select
               class="roundedTextBox search-text-box"
-              solo
+              variant="solo"
+                rounded
               :items="searchByItems"
               v-model="searchBy"
+                :item-props="true"
             ></v-select>
           </v-col>
-          <v-col lg="2" xl="1" md="2" sm="2" align="center">
+          <v-col lg="2" xl="1" md="2" sm="2" align="center" style="margin-top:40px !important;">
             <v-btn class="menuBtn" large color="#319B42" dark @click="search">Search</v-btn>
           </v-col>
-          <v-col lg="1" xl="1" md="2" sm="2">
+          <v-col lg="1" xl="1" md="2" sm="2" style="margin-top:40px !important;">
             <v-btn class="menuBtn" large v-show="searchFor == '' && searchBy == ''">Reset</v-btn>
             <v-btn class="menuBtn" large color="#319B42" dark v-show="searchFor != '' || searchBy != ''" @click="reset">Reset</v-btn>
           </v-col>
@@ -39,8 +48,8 @@
       </v-row>
     </v-form>
 
-    <v-layout justify-center align-content-center align-center>
-      <v-flex xs11>
+    <v-layout justify="center" align-content="center" align="center"  style="margin-left:20px;position:unset !important;">
+      <v-col cols="11">
         <v-data-table v-if="isSearched" ref="dataTable"
           :headers="headers"
           :items="items"
@@ -64,8 +73,8 @@
               :color="mainColor"
               v-if="item.isLinkActive === 'Yes' && checkSpecificPermission(['HORegistrationReqUpdate'])"
             >
-              <template v-slot:activator="{ on }">
-                <v-icon color="blue" @click="sendEmail(item)" v-on="on">mdi-email-outline</v-icon>
+              <template #activator="{ props }">
+                <v-icon color="blue" @click="sendEmail(item)" v-bind="props">mdi-email-outline</v-icon>
               </template>
               <span>Resend Reset Password Link</span>
             </v-tooltip>
@@ -74,8 +83,8 @@
               :color="mainColor"
               v-if="!checkSpecificPermission(['HORegistrationReqUpdate'])"
             >
-              <template v-slot:activator="{ on }">
-                <v-icon color="grey" v-on="on">mdi-email-outline</v-icon>
+              <template #activator="{ props }">
+                <v-icon color="grey" v-bind="props">mdi-email-outline</v-icon>
               </template>
               <span>{{ permissionDeniedToolTip }}</span>
             </v-tooltip>
@@ -85,11 +94,11 @@
               :color="mainColor"
               v-if="item.isLinkActive === 'Yes' && checkSpecificPermission(['HORegistrationReqUpdate'])"
             >
-              <template v-slot:activator="{ on }">
+              <template #activator="{ props }">
                 <v-icon
                   color="orange"
                   @click="changeStatus(item, false)"
-                  v-on="on"
+                  v-bind="props"
                 >mdi-close-box-outline</v-icon>
               </template>
               <span>Deactivate link</span>
@@ -100,15 +109,15 @@
               :color="mainColor"
               v-if="item.isLinkActive === 'Yes' && !checkSpecificPermission(['HORegistrationReqUpdate'])"
             >
-              <template v-slot:activator="{ on }">
-                <v-icon color="grey" v-on="on">mdi-close-box-outline</v-icon>
+              <template #activator="{ props }">
+                <v-icon color="grey" v-bind="props">mdi-close-box-outline</v-icon>
               </template>
               <span>{{ permissionDeniedToolTip }}</span>
             </v-tooltip>
 
             <v-tooltip top :color="mainColor" v-if="item.isLinkActive === 'Yes' && checkSpecificPermission(['HORegistrationReqUpdate'])">
-              <template v-slot:activator="{ on }">
-                <v-icon color="green" v-on="on" @click="copyLinkToClipboard(item)">mdi-content-copy</v-icon>
+              <template #activator="{ props }">
+                <v-icon color="green" v-bind="props" @click="copyLinkToClipboard(item)">mdi-content-copy</v-icon>
               </template>
               <span>Copy</span>
             </v-tooltip>
@@ -116,10 +125,10 @@
           </template>
           <template v-slot:footer.page-text="{pageStart, pageStop, itemsLength}">
             <div
-              :class="$vuetify.breakpoint.smAndDown?'v-data-footer__select smallFooter':'v-data-footer__select'"
+              :class="$vuetify.display.smAndDown?'v-data-footer__select smallFooter':'v-data-footer__select'"
             >
               <span
-                v-if="$vuetify.breakpoint.mdAndUp"
+                v-if="$vuetify.display.mdAndUp"
               >Viewing items: {{ pageStart }}-{{ pageStop }} of {{ itemsLength }}</span>
               <span style="margin-left: 10px;">Page:&nbsp;</span>
               <v-select
@@ -135,7 +144,7 @@
             </div>
           </template>
         </v-data-table>
-      </v-flex>
+      </v-col>
     </v-layout>
 
     <confirm ref="confirm"></confirm>  
@@ -193,10 +202,10 @@ export default {
       searchFor: "",
       searchBy: "",
       searchByItems: [
-        { text: "Account Number", value: "@franchiseId" },
-        { text: "User Name", value: "@emailId" },
-        { text: "First Name", value: "@firstName" },
-        { text: "Last Name", value: "@lastName" }
+        { title: "Account Number", key: "@franchiseId" },
+        { title: "User Name", key: "@emailId" },
+        { title: "First Name", key: "@firstName" },
+        { title: "Last Name", key: "@lastName" }
       ],
       items: [],
       page: 1,
@@ -208,7 +217,17 @@ export default {
       this.isSearched = true;
       this.waiting = true;
       this.items = [];
-      dataService.getPasswordLinks(this.searchFor, this.searchBy)
+         let serchedbykey = "";
+    
+      switch(this.searchBy){
+case "Account Number" :  this.serchedbykey = "@franchiseId"; break;
+case "User Name" :  this.serchedbykey = "@emailId"; break;
+case "First Name" :  this.serchedbykey = "@firstName";break;
+case "Last Name" :  this.serchedbykey = "@lastName";break;
+
+
+ }
+      dataService.getPasswordLinks(this.searchFor, this.serchedbykey)
       .then(response => {
           this.waiting = false;
           if (response.status == "200") {
@@ -345,13 +364,13 @@ export default {
     },
     headers() {
       return [
-        { text: "Account Number", value: "franchiseId" },
-        { text: "User Name", value: "emailId" },
-        { text: "First Name", value: "firstName" },
-        { text: "Last Name", value: "lastName" },
-        { text: "Active", value: "isLinkActive" },
-        { text: "Email Sent", value: "isEmailSent" },
-        { text: "Actions", value: "action", sortable: false }
+        { title: "Account Number", key: "franchiseId" },
+        { title: "User Name", key: "emailId" },
+        { title: "First Name", key: "firstName" },
+        { title: "Last Name", key: "lastName" },
+        { title: "Active", key: "isLinkActive" },
+        { title: "Email Sent", key: "isEmailSent" },
+        { title: "Actions", key: "action", sortable: false }
       ];
     }
   }

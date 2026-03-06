@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row>
-      <v-col v-if="$vuetify.breakpoint.mdAndUp"></v-col>
+      <v-col v-if="$vuetify.display.mdAndUp"></v-col>
       <v-col :cols="11">
         <HomeOfficeOptions></HomeOfficeOptions>
       </v-col>

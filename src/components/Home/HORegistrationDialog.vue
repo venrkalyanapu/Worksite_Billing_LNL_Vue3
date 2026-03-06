@@ -1,7 +1,7 @@
 <template>
     <v-dialog v-model="dialog" persistent max-width="640px">
-        <template v-slot:activator="{ on }">
-            <v-btn color="#319B42" dark large class="menuBtn" v-on="on" v-show="allowCreateLink">Create</v-btn>
+        <template #activator="{ props }">
+            <v-btn color="#319B42" dark large class="menuBtn" v-bind="props" v-show="allowCreateLink">Create</v-btn>
             <v-btn large class="menuBtn" v-show="!allowCreateLink">Create</v-btn>
         </template>
         <v-card>
@@ -10,24 +10,24 @@
             </v-card-title>
             <v-card-text>
 
-            <v-alert text color="success" v-if="showSuccessMessages" dismissible>
-                <v-row class="success-message">
-                    <ul id="successMessage">
+            <v-alert text color="success" variant="tonal" v-if="showSuccessMessages" closable>
+                <!-- <v-row class="success-message" style="padding-left:20px;color:#4caf50 !important;font-size:16px;"> -->
+                    <ul id="successMessage" class="success-message" style="padding-left:20px;color:#4caf50 !important;font-size:16px;">
                         <li v-for="message in successMessages" v-bind:key="message">
                             {{ message }}
                         </li>
                     </ul>
-                </v-row>
+                <!-- </v-row> -->
             </v-alert>
 
-            <v-alert text color="warning" v-if="showErrorMessages">
-                <v-row class="error-message">
-                    <ul id="errorMessage">
+            <v-alert text color="warning" variant="tonal"  v-if="showErrorMessages">
+                <!-- <v-row class="error-message"> -->
+                    <ul id="errorMessage" class="error-message" style="padding-left:20px;color:red !important;font-size:16px;">
                         <li v-for="message in errorMessages" v-bind:key="message">
                             {{ message }}
                         </li>
                     </ul>
-                </v-row>
+                <!-- </v-row> -->
             </v-alert>
 
             <v-alert text color="info" v-if="showExistingAdminUserRoles" dismissible>
@@ -61,31 +61,31 @@
 
             <v-form ref="form">
                 <v-container>
-                    <v-row>
-                        <v-text-field label="*Account Number" v-model="franchiseId" dense outlined
+                    <v-row style="padding-top:5px !important">
+                        <v-text-field label="*Account Number" v-model="franchiseId" dense variant="outlined" color="primary"
                         :rules='franchiseIdRules' required maxlength="5" v-on:keyup="onChange" ref="franchiseId"
                         ></v-text-field>
                     </v-row>
-                    <v-row v-if="companyName.length > 0">
+                    <v-row style="padding-top:5px !important" v-if="companyName.length > 0">
                         <div class="company-name">
                             {{ companyName }}
                         </div>
                     </v-row>
-                    <v-row>
-                        <v-text-field label="*User Email address (Log-in ID)" v-model="emailId" dense outlined
+                    <v-row style="padding-top:5px !important">
+                        <v-text-field label="*User Email address (Log-in ID)" v-model="emailId" dense variant="outlined" color="primary"
                         :rules='emailIdRules' required
                         ></v-text-field>                                        
                     </v-row>
-                    <v-row>
-                        <v-text-field label="Mobile Phone Number" v-model="phoneNumber" dense outlined
+                    <v-row style="padding-top:5px !important">
+                        <v-text-field label="Mobile Phone Number" v-model="phoneNumber" dense variant="outlined" color="primary"
                         :rules='phoneRules' v-mask="'(###) ###-####'"
                         ></v-text-field>                                        
                         </v-row>
                     <v-row>
-                        <v-text-field label="First Name" v-model="firstName" :rules='firstNameRules' dense outlined></v-text-field>
+                        <v-text-field label="First Name" v-model="firstName" :rules='firstNameRules' dense variant="outlined" color="primary"></v-text-field>
                     </v-row>
                     <v-row>
-                        <v-text-field label="Last Name" v-model="lastName" :rules='lastNameRules' dense outlined></v-text-field>
+                        <v-text-field label="Last Name" v-model="lastName" :rules='lastNameRules' dense variant="outlined" color="primary"></v-text-field>
                     </v-row>
                 </v-container>
             <small>*indicates required field</small>
@@ -93,16 +93,16 @@
             </v-card-text>
             <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="#319B42" dark class="menuBtn" @click.stop="tryAddRegistrationLink" v-show="showCreate && !waiting">Create</v-btn>          
-            <v-btn class="menuBtn" v-show="!showCreate || waiting">Create</v-btn>          
+            <v-btn color="#319B42" dark class="menuBtn buttonstyle" @click.stop="tryAddRegistrationLink" v-show="showCreate && !waiting">Create</v-btn>          
+            <v-btn class="menuBtn" dark v-show="!showCreate || waiting">Create</v-btn>          
             <v-spacer></v-spacer>
-            <v-btn color="#319B42" dark class="menuBtn" @click="close">Close</v-btn>          
+            <v-btn color="#319B42"  dark class="menuBtn buttonstyle" @click="close">Close</v-btn>          
             <v-spacer></v-spacer>
             </v-card-actions>
         </v-card>
         <v-progress-circular
         v-if="waiting"
-        :class="$vuetify.breakpoint.smAndDown ? 'waitCircleSm' : 'waitCircle'"
+        :class="$vuetify.display.smAndDown ? 'waitCircleSm' : 'waitCircle'"
         indeterminate
         color="#319B42"
         :size="100"
@@ -496,5 +496,9 @@ export default {
 }
 .margin-right-30 {
     margin-right: 30px;
+}
+.buttonstyle{
+    background-color: rgb(49, 155, 66) !important;
+    color: rgb(255, 255, 255) !important;
 }
 </style>

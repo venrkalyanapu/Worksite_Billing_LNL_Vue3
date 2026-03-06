@@ -1,14 +1,18 @@
 <template>
-  <div>
-    <v-breadcrumbs :items="breadcrumbItems" class="align-left"></v-breadcrumbs>
+  <div style="margin-left:20px !important;">
+    <v-breadcrumbs :items="breadcrumbItems" class="align-left" style="color:#1976d2">
+       <template v-slot:title="{ item }">
+      {{ item.text }}
+    </template>
+    </v-breadcrumbs>
 
     <v-row no-gutters class="mb-6" v-if="checkPermissions('/homeOfficeRegistration')">
-      <v-col :cols="$vuetify.breakpoint.smAndDown?2:1">
+      <v-col :cols="$vuetify.display.smAndDown?2:1">
         <v-icon color="#00558c" size="50">mdi-account-plus</v-icon>
       </v-col>
       <v-col>
         <h2 class="menuHeaders">Registration Links</h2>
-        <v-flex>Registration Links Content</v-flex>
+        <v-col>Registration Links Content</v-col>
         <router-link to="/homeOfficeRegistration" class="menuLinks">
           <v-btn color="#319B42" dark class="menuBtn">Registration Links</v-btn>
         </router-link>
@@ -16,12 +20,12 @@
     </v-row>
 
     <v-row no-gutters class="mb-6" v-if="checkPermissions('/homeOfficePasswordLink')">
-      <v-col :cols="$vuetify.breakpoint.smAndDown?2:1">
+      <v-col :cols="$vuetify.display.smAndDown?2:1">
         <v-icon color="#00558c" size="50">mdi-lock-reset</v-icon>
       </v-col>
       <v-col>
         <h2 class="menuHeaders">Password Reset Links</h2>
-        <v-flex>Manage Password Reset Links</v-flex>
+        <v-col>Manage Password Reset Links</v-col>
         <router-link to="/homeOfficePasswordLink" class="menuLinks">
           <v-btn color="#319B42" dark class="menuBtn">Password Reset Links</v-btn>
         </router-link>
