@@ -15,40 +15,46 @@
 
     <v-progress-circular
       v-if="waiting"
-      :class="$vuetify.breakpoint.smAndDown ? 'waitCircleSm' : 'waitCircle'"
+      :class="$vuetify.display.smAndDown ? 'waitCircleSm' : 'waitCircle'"
       indeterminate
       color="#319B42"
       :size="70"
       width="10"
     ></v-progress-circular>
-
-    <v-breadcrumbs :items="breadcrumbItems"></v-breadcrumbs>
-    <v-form ref="form">
+      <v-breadcrumbs :items="breadcrumbItems" style="color:#1976d2">
+         <template v-slot:title="{ item }">
+      {{ item.text }}
+    </template>
+      </v-breadcrumbs>
+    <v-form ref="form" style="position:sticky !important;margin-left: 40px !important;">
       <v-row>
-        <v-layout
-          align-baseline
-          align-content-center
-          align-center
-          justify-center
+        <v-layout style="position:sticky !important;"
+          align ="center"
+          align-content="center"
+         
+          justify="center"
         >
-          <v-col lg="3" xl="3" md="4" sm="4">
+          <v-col cols="12" sm="3">
             <v-text-field
               v-model="searchFor"
-              solo
+               variant="solo"
+                rounded
               label="Search for..."
               :rules="searchRules"
               class="roundedTextBox search-text-box"
               append-icon="search"
+              append-inner-icon="mdi-magnify"
               v-on:keyup.enter="gotoSearchBy('searchBy')"
             />
           </v-col>
-          <v-col lg="1" xl="1" md="1" sm="1" align="right">
+          <v-col cols="12" sm="1" align="right" style="margin-top:40px !important;">
             <span>by</span>
           </v-col>
-          <v-col lg="3" xl="3" md="3" sm="4">
+          <v-col cols="12" sm="3">
             <v-select
               class="roundedTextBox search-text-box"
-              solo
+               variant="solo"
+                rounded
               :items="searchByItems"
               v-model="searchBy"
               :rules="searchByRules"
@@ -57,7 +63,7 @@
               v-on:keyup.enter="$refs['searchRef'].$el.focus()"
             ></v-select>
           </v-col>
-          <v-col lg="2" xl="1" md="2" sm="2" align="center">
+          <v-col cols="12" sm="2" align="center" style="margin-top:40px !important;">
             <v-btn
               class="menuBtn"
               large
@@ -67,14 +73,14 @@
               ref="searchRef"
             >Search</v-btn>
           </v-col>
-          <v-col lg="1" xl="1" md="2" sm="2">
-            <v-btn class="menuBtn" large v-show="searchFor == '' && searchBy == '@companyId'">Reset</v-btn>
+          <v-col cols="12" sm="2" style="margin-top:40px !important;">
+            <v-btn class="menuBtn" large v-show="searchFor == '' && searchBy == 'Account Number'">Reset</v-btn>
             <v-btn
               class="menuBtn"
               large
               color="#319B42"
               dark
-              v-show="searchFor != '' || searchBy != '@companyId'"
+              v-show="searchFor != '' || searchBy != 'Account Number'"
               @click="reset"
             >Reset</v-btn>
           </v-col>
@@ -82,8 +88,8 @@
       </v-row>
     </v-form>
 
-    <v-layout justify-center align-content-center align-center>
-      <v-flex xs11>
+    <v-layout justify="center" align-content="center" align="center" style="position:unset !important;margin-left:20px !important;">
+      <v-col cols="11">
         <v-data-table
           v-if="isSearched"
           :headers="headers"
@@ -119,10 +125,10 @@
           </template>
           <template v-slot:footer.page-text="{pageStart, pageStop, itemsLength}">
             <div
-              :class="$vuetify.breakpoint.smAndDown?'v-data-footer__select smallFooter':'v-data-footer__select'"
+              :class="$vuetify.display.smAndDown?'v-data-footer__select smallFooter':'v-data-footer__select'"
             >
               <span
-                v-if="$vuetify.breakpoint.mdAndUp"
+                v-if="$vuetify.display.mdAndUp"
               >Viewing items: {{ pageStart }}-{{ pageStop }} of {{ itemsLength }}</span>
               <span style="margin-left: 10px;">Page:&nbsp;</span>
               <v-select
@@ -138,7 +144,7 @@
             </div>
           </template>
         </v-data-table>
-      </v-flex>
+      </v-col>
     </v-layout>
 
     <v-dialog v-model="showCompanyDetails" persistent width="600">
@@ -188,7 +194,7 @@ export default {
       this.selectDialog = false;
     }
     //default searhcBy
-    this.searchBy = "@companyId";
+    this.searchBy = "Account Number";
   },
   data() {
     return {
@@ -213,8 +219,8 @@ export default {
       searchFor: "",
       searchBy: "",
       searchByItems: [
-        { text: "Account Number", value: "@companyId" },
-        { text: "Company Name", value: "@companyName" },
+        { title: "Account Number", key: "@companyId" },
+        { title: "Company Name", key: "@companyName" },
         // { text: "Agency", value: "@agency" }
       ],
       items: [],
@@ -454,7 +460,7 @@ export default {
       this.waiting = false;
       this.isSearched = false;
       this.searchFor = "";
-      this.searchBy = "@companyId";
+      this.searchBy = "Account Number";
       this.$refs.form.resetValidation();
     },
     gotoSearchBy(refName) {
@@ -469,8 +475,14 @@ export default {
       this.isSearched = false;
       this.waiting = true;
       this.items = [];
+      
+         
+      let searchingbyid = "";
+          if(this.searchBy == "Company Name") this.searchingbyid = "@companyName";
+          if(this.searchBy == "Account Number") this.searchingbyid = "@CompanyId";
       dataService
-        .searchCompanies(this.searchFor, this.searchBy)
+  
+        .searchCompanies(this.searchFor, this.searchingbyid)
         .then((response) => {
           this.isSearched = true;
           this.waiting = false;
@@ -516,13 +528,13 @@ export default {
     },
     headers() {
       return [
-        { text: "Account Number", value: "franchiseId" },
-        { text: "Company Name", value: "franchiseName" },
+        { title: "Account Number", key: "franchiseId" },
+        { title: "Company Name", key: "franchiseName" },
         // { text: "Agency", value: "agency" },
         // { text: "District", value: "district" },
         // { text: "Contact", value: "billContact" },
         // { text: "Phone", value: "phone" },
-        { text: "Actions", value: "action", sortable: false },
+        { title: "Actions", key: "action", sortable: false },
       ];
     },
   },
