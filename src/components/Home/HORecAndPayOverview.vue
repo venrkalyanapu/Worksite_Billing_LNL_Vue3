@@ -124,11 +124,14 @@
     <v-row justify="center" align="center" align-content="center">
       <v-col cols="11">
         <v-data-table
+          v-model:page="page"
+          v-model:items-per-page="itemsPerPage"
+          v-model:sort-by="sortBy"
           :headers="headers"
           :items="filteredItems"
           class="elevation-1"
           :loading="waitCircle"
-          item-key="item.index"
+          item-value="index"
           :items-per-page.sync="itemsPerPage"
           dark
           sort-by="invoiceLockStart"
@@ -145,9 +148,9 @@
             <v-icon :color="mainColor" @click="confirmUnlock(item)">mdi-lock</v-icon>
           </template>
 
-          <template v-slot:item.invoiceLockStart="{item}">{{ item.invoiceLockStart | dateTime}}</template>
-          <template v-slot:item.dueDate="{item}">{{ item.dueDate | mmddyyyy }}</template>
-          <template v-slot:item.delinquentDate="{item}">{{ item.delinquentDate | mmddyyyy }}</template>
+          <template v-slot:item.invoiceLockStart="{item}">{{ $filters.dateTime(item.invoiceLockStart)}}</template>
+          <template v-slot:item.dueDate="{item}">{{ $filters.dateTime(item.dueDate) }}</template>
+          <template v-slot:item.delinquentDate="{item}">{{ $filters.dateTime(item.delinquentDate) }}</template>
 
           <template v-slot:footer.page-text="{pageStart, pageStop, itemsLength}">
             <div
@@ -177,9 +180,9 @@
     <br />
     <v-dialog v-model="unlockDialog" persistent width="500" id="unlockDialog">
       <v-card>
-        <v-card-title class="headline" :color="$store.state.mainColor">
-          <v-icon :color="$store.state.mainColor" x-large>mdi-lock-open</v-icon>
-          <span>Unlock Invoice</span>
+        <v-card-title class="text-h5" :style="{ color: $store.state.mainColor }">
+          <v-icon :color="$store.state.mainColor" size="x-large">mdi-lock-open</v-icon>
+          <span class="ms-2">Unlock Invoice</span>
         </v-card-title>
 
         <v-row align="center"  justify="center">
@@ -192,7 +195,8 @@
           <v-spacer></v-spacer>
           <v-btn
             color="#319B42"
-            dark
+            theme="dark"
+            variant="flat"
             class="menuBtn"
             @click="
               unlockDialog = false; ClearAndUnlock();       
@@ -200,7 +204,8 @@
           >Clear</v-btn>
           <v-btn
             color="#319B42"
-            dark
+            theme="dark"
+            variant="flat"
             class="menuBtn"
             @click="
               unlockDialog = false;  Unlock();        
@@ -208,7 +213,8 @@
           >Retain</v-btn>
           <v-btn
             color="#319B42"
-            dark
+            theme="dark"
+            variant="flat"
             class="menuBtn"
             @click="
               unlockDialog = false;        
@@ -235,7 +241,8 @@
 
           <v-btn
             color="#319B42"
-            dark
+            theme="dark"
+            variant="flat"
             class="menuBtn"
             @click="
               unlockedDialog = false;        
@@ -260,12 +267,12 @@
       </v-card>
     </v-dialog>
     <v-progress-circular
-      v-if="waitCircle"
-      :class="$vuetify.display.smAndDown ? 'waitCircleSm' : 'waitCircle'"
-      indeterminate
-      color="#319B42"
-      :size="70"
-      width="10"
+    v-if="waitCircle"
+    :class="$vuetify.display.smAndDown ? 'waitCircleSm' : 'waitCircle'"
+    indeterminate
+    color="#319B42"
+    :size="70"
+    :width="10"
     ></v-progress-circular>
   </span>
 </template>
@@ -292,30 +299,34 @@ export default {
           to: "HOSystemTools",
         },        
         {
-          text: "Reconcile & Pay Lock Settings",
+          title: "Reconcile & Pay Lock Settings",
           disabled: true,
         },
       ],
       valid: true,
       headers: [
         {
-          text: "Account Number",
-          value: "franchiseId",
+          title: "Account Number",
+          key: "franchiseId",
           sortable: true,
           width: 75,
         },
-        { text: "Company Name", value: "franchiseName", sortable: true },
-        { text: "Invoice Id", value: "invoiceId", sortable: true },
-        { text: "Due Date", value: "dueDate", sortable: true },
+        { title: "Company Name", key: "franchiseName", sortable: true },
+        { title: "Invoice Id", key: "invoiceId", sortable: true },
+        { title: "Due Date", key: "dueDate", sortable: true },
         {
-          text: "Delinquent Date",
-          value: "delinquentDate",
+          title: "Delinquent Date",
+          key: "delinquentDate",
           sortable: true,
           width: 100,
         },
-        { text: "Locked By", value: "lockedBy", sortable: true },
-        { text: "Locked On", value: "invoiceLockStart", sortable: true },
-        { text: "Unlock", value: "unlock", width: 75, sortable: false },
+        { title: "Locked By", key: "lockedBy", sortable: true },
+        { title: "Locked On", key: "invoiceLockStart", sortable: true },
+        { title: "Unlock", key: "unlock", width: 75, sortable: false },
+      ],
+       sortBy: [
+       { key: 'franchiseName', order: 'asc' },     
+       { key: 'invoiceLockStart', order: 'desc' }  
       ],
       items: [],
       noItemsFlag: false,
@@ -405,7 +416,7 @@ export default {
     },
   },
   methods: {
-    async load() {
+     async load() {
       this.waitCircle = true;
       await HTTP.get("ReconcilePay/GetLockedInvoices", {
         params: {},
@@ -467,6 +478,7 @@ export default {
           this.errDialog = true;
         });
     },
+
     async Unlock() {
       this.waitCircle = true;
       await HTTP.get("ReconcilePay/UnlockInvoice", {
