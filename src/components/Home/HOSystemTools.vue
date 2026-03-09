@@ -1,17 +1,17 @@
 <template>
   <div>
-    <v-breadcrumbs :items="breadcrumbItems"></v-breadcrumbs>
+    <v-breadcrumbs :items="breadcrumbItems" style="color:#1976d2"></v-breadcrumbs>
 
     <v-row>
-      <v-col v-if="$vuetify.breakpoint.mdAndUp"></v-col>
+      <v-col v-if="$vuetify.display.mdAndUp"></v-col>
       <v-col :cols="11">
         <v-row no-gutters class="mb-6" v-if="showInvoiceTool">
-        <v-col :cols="$vuetify.breakpoint.smAndDown?2:1">
+        <v-col :cols="$vuetify.display.smAndDown?2:1">
             <v-icon color="#00558c" size="50">mdi-file-document-edit</v-icon>
         </v-col>
         <v-col>
             <h2 class="menuHeaders">Invoice Maintenance</h2>
-            <v-flex>Update Invoice Payments Data, Delete Invoices</v-flex>
+            <v-col>Update Invoice Payments Data, Delete Invoices</v-col>
             <router-link to="/HomeOfficeInvoiceTool" class="menuLinks">
             <v-btn color="#319B42" dark class="menuBtn">Invoice Maintenance</v-btn>
             </router-link>
@@ -19,25 +19,25 @@
         </v-row>
 
         <v-row no-gutters class="mb-6" v-if="showRecPayLock">
-        <v-col :cols="$vuetify.breakpoint.smAndDown?2:1">
+        <v-col :cols="$vuetify.display.smAndDown?2:1">
             <v-icon color="#00558c" size="50">mdi-lock</v-icon>
         </v-col>
         <v-col>
             <h2 class="menuHeaders">Reconcile &amp; Pay Lock Settings</h2>
-            <v-flex>Unlock and Reset Reconcile &amp; Pay Invoices</v-flex>
-            <router-link to="/recpay" class="menuLinks">
-            <v-btn color="#319B42" dark class="menuBtn">Reconcile &amp; Pay Lock Settings</v-btn>
-            </router-link>
+            <v-col>Unlock and Reset Reconcile &amp; Pay Invoices</v-col>
+             <v-btn to="/recpay" color="#319B42" class="menuBtn mt-2">
+              Reconcile &amp; Pay Lock Settings
+            </v-btn>
         </v-col>
         </v-row>
 
         <v-row no-gutters class="mb-6" v-if="showConfiguration">
-        <v-col :cols="$vuetify.breakpoint.smAndDown?2:1">
+        <v-col :cols="$vuetify.display.smAndDown?2:1">
             <v-icon color="#00558c" size="50">mdi-settings</v-icon>
         </v-col>
         <v-col>
             <h2 class="menuHeaders">Settings</h2>
-            <v-flex>System Settings</v-flex>
+            <v-col>System Settings</v-col>
             <router-link to="/homeOfficeConfiguration" class="menuLinks">
             <v-btn color="#319B42" dark class="menuBtn">Settings</v-btn>
             </router-link>
@@ -56,12 +56,12 @@ export default {
   data: () => ({
       breadcrumbItems: [
         {
-          text: "Home Office",
+          title: "Home Office",
           disabled: false,
-          href: "hoLanding"
+          to: "hoLanding"
         },
         {
-          text: "Account Maintenance",
+          title: "Account Maintenance",
           disabled: true
         }
       ],    
@@ -101,3 +101,4 @@ export default {
   word-wrap: break-word !important;
 }
 </style>
+

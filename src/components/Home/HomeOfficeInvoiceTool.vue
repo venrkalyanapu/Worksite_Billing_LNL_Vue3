@@ -1,12 +1,11 @@
 <template>
   <span>
-    <v-breadcrumbs :items="breadcrumbItems"></v-breadcrumbs>
+    <v-breadcrumbs :items="breadcrumbItems" style="color:#1976d2"></v-breadcrumbs>
     <v-form ref="form">
-      <v-layout
-        align-baseline
-        align-content-center
-        align-center
-        justify-center
+      <v-row
+        align="center"
+        align-content="center"
+        justify="center"
       >
         <v-col lg="3" xl="3" md="4" sm="4">
           <v-row>
@@ -39,18 +38,17 @@
               persistent
               width="290px"
             >
-              <template v-slot:activator="{ on, attrs }">
+              <template v-slot:activator="{ props }">
                 <v-text-field
                   solo
                   class="roundedTextBox search-text-box"
                   v-model="dueDateFormatted"
                   label="Due Date"
                   readonly
-                  v-bind="attrs"
-                  v-on="on"
+                  v-bind="props"
                 ></v-text-field>
               </template>
-              <v-date-picker v-model="dueDate" scrollable color="#00558c">
+              <v-date-picker v-model="dueDate" scrollable color="#00558c"  @update:model-value="dueDatePickerModal = false">
                 <v-spacer></v-spacer>
                 <v-btn text color="#00558c" @click="dueDatePickerModal = false">Cancel</v-btn>
                 <v-btn text color="#00558c" @click="$refs.dueDateDialog.save(dueDate)">OK</v-btn>
@@ -70,19 +68,18 @@
               persistent
               width="290px"
             >
-              <template v-slot:activator="{ on, attrs }">
+              <template v-slot:activator="{ props }">
                 <v-text-field
                   solo
                   class="roundedTextBox search-text-box pad-right"
                   v-model="startDateFormatted"
                   label="From"
                   readonly
-                  v-bind="attrs"
-                  v-on="on"
+                  v-bind="props"
                   :rules="startDateRules"
                 ></v-text-field>
               </template>
-              <v-date-picker v-model="startDate" scrollable color="#00558c">
+              <v-date-picker v-model="startDate" scrollable color="#00558c"  @update:model-value="startDatePickerModal = false">
                 <v-spacer></v-spacer>
                 <v-btn text color="#00558c" @click="startDatePickerModal = false">Cancel</v-btn>
                 <v-btn text color="#00558c" @click="$refs.startDateDialog.save(startDate)">OK</v-btn>
@@ -99,18 +96,17 @@
               persistent
               width="290px"
             >
-              <template v-slot:activator="{ on, attrs }">
+              <template v-slot:activator="{ props }">
                 <v-text-field
                   solo
                   class="roundedTextBox search-text-box"
                   v-model="endDateFormatted"
                   label="To"
                   readonly
-                  v-bind="attrs"
-                  v-on="on"
+                  v-bind="props"
                 ></v-text-field>
               </template>
-              <v-date-picker v-model="endDate" scrollable color="#00558c">
+              <v-date-picker v-model="endDate" scrollable color="#00558c"  @update:model-value="endDatePickerModal = false">
                 <v-spacer></v-spacer>
                 <v-btn text color="#00558c" @click="endDatePickerModal = false">Cancel</v-btn>
                 <v-btn text color="#00558c" @click="$refs.endDateDialog.save(endDate)">OK</v-btn>
@@ -125,11 +121,11 @@
           <v-btn class="menuBtn" large v-show="!canReset">Reset</v-btn>
           <v-btn class="menuBtn" large color="#319B42" dark v-show="canReset" @click="reset">Reset</v-btn>
         </v-col>
-      </v-layout>
+      </v-row>
     </v-form>
 
-    <v-layout justify-center align-content-center align-center v-if="!waiting && isSearched">
-      <v-flex xs11>
+    <v-row justify="center" align="center" align-content="center" v-if="!waiting && isSearched">
+      <v-col cols="11">
         <v-data-table
           ref="dataTable"
           :headers="headers"
@@ -150,18 +146,18 @@
         >
           <template v-slot:item.action="{ item }">
             <v-tooltip top :color="mainColor">
-              <template v-slot:activator="{ on }">
+              <template v-slot:activator="{ props }">
                 <v-icon
                   color="blue"
                   @click="updateInvoice(item)"
-                  v-on="on"
+                  v-bind="props"
                 >mdi-file-document-edit-outline</v-icon>
               </template>
               <span>Update Invoice</span>
             </v-tooltip>
             <v-tooltip top :color="mainColor">
-              <template v-slot:activator="{ on }">
-                <v-icon color="orange" @click="deleteInvoice(item)" v-on="on">mdi-trash-can-outline</v-icon>
+              <template v-slot:activator="{ props }">
+                <v-icon color="orange" @click="deleteInvoice(item)" v-bind="props">mdi-trash-can-outline</v-icon>
               </template>
               <span>Delete Invoice</span>
             </v-tooltip>
@@ -187,13 +183,13 @@
             </div>
           </template>
         </v-data-table>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
 
     <v-row>
-      <v-layout align-content-center align-center justify-center>
+      <v-row align="center" justify="center" align-content="center">
         <UpdateDeleteDialog ref="editDialog" :franchiseId="franchiseId" />
-      </v-layout>
+      </v-row>
     </v-row>
   </span>
 </template>
@@ -201,7 +197,7 @@
 import dataService from "@/services/dataService";
 import UpdateDeleteDialog from "./UpdateDeleteInvoiceDialog";
 import eventBus from "@/event-bus.js";
-import Vue from "vue";
+import * as Vue from 'vue'
 
 export default {
   name: "HomeOfficeInvoiceTool",
@@ -212,14 +208,14 @@ export default {
     return {
       breadcrumbItems: [
         {
-          text: "Home Office",
+          title: "Home Office",
           disabled: false,
-          href: "hoLanding",
+          to: "hoLanding",
         },
         {
-          text: "Account Maintenance",
+          title: "Account Maintenance",
           disabled: false,
-          href: "HOSystemTools",
+          to: "HOSystemTools",
         },
         {
           text: "Invoice Maintenance",
@@ -256,7 +252,7 @@ export default {
     };
   },
   created() {
-    eventBus.$on("invoiceUpdated", (item) => {
+    eventBus.on("invoiceUpdated", (item) => {
       if (item) {
         var index = this.items.findIndex(function (elem) {
           return elem.invoiceId == item.invoiceId;
@@ -268,7 +264,7 @@ export default {
       }
     });
 
-    eventBus.$on("invoiceDeleted", (item) => {
+    eventBus.on("invoiceDeleted", (item) => {
       if (item) {
         var index = this.items.findIndex(function (elem) {
           return elem.invoiceId == item.invoiceId;
@@ -282,8 +278,10 @@ export default {
   methods: {
     formatDatePicker(date) {
       if (!date) return null;
-      const [year, month, day] = date.split("-");
-      return `${month}/${day}/${year}`;
+      const d = new Date(date);
+      if (isNaN(d.getTime())) return null; 
+      
+      return d.toLocaleDateString('en-US')
     },
     reset() {
       this.franchiseId = "";

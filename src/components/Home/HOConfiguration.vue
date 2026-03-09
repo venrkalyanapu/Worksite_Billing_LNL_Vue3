@@ -1,9 +1,9 @@
 <template>
     <span>
-        <v-breadcrumbs :items="breadcrumbItems"></v-breadcrumbs>
+        <v-breadcrumbs :items="breadcrumbItems" style="color:#1976d2"></v-breadcrumbs>
 
-        <v-layout justify-center align-content-center align-center>
-        <v-flex xs11>
+        <v-row justify="center" align="center" align-content="center">
+        <v-col cols="11">
             <v-data-table
             :headers="headers"
             :items="items"
@@ -42,8 +42,8 @@
                 </div>
             </template>
             </v-data-table>
-        </v-flex>
-        </v-layout>
+        </v-col>
+        </v-row>
 
     </span>
 </template>
@@ -56,14 +56,14 @@ export default {
         return {
             breadcrumbItems: [
                 {
-                    text: 'Home Office',
+                    title: 'Home Office',
                     disabled: false,
-                    href: 'HOLanding',
+                    to: 'HOLanding',
                 },
                 {
-                text: "Account Maintenance",
+                title: "Account Maintenance",
                 disabled: false,
-                href: "HOSystemTools"
+                to: "HOSystemTools"
                 },        
                 {
                     text: 'Settings',
