@@ -48,7 +48,7 @@
                   v-bind="props"
                 ></v-text-field>
               </template>
-              <v-date-picker v-model="dueDate" scrollable color="#00558c">
+              <v-date-picker v-model="dueDate" scrollable color="#00558c"  @update:model-value="dueDatePickerModal = false">
                 <v-spacer></v-spacer>
                 <v-btn text color="#00558c" @click="dueDatePickerModal = false">Cancel</v-btn>
                 <v-btn text color="#00558c" @click="$refs.dueDateDialog.save(dueDate)">OK</v-btn>
@@ -79,7 +79,7 @@
                   :rules="startDateRules"
                 ></v-text-field>
               </template>
-              <v-date-picker v-model="startDate" scrollable color="#00558c">
+              <v-date-picker v-model="startDate" scrollable color="#00558c"  @update:model-value="startDatePickerModal = false">
                 <v-spacer></v-spacer>
                 <v-btn text color="#00558c" @click="startDatePickerModal = false">Cancel</v-btn>
                 <v-btn text color="#00558c" @click="$refs.startDateDialog.save(startDate)">OK</v-btn>
@@ -106,7 +106,7 @@
                   v-bind="props"
                 ></v-text-field>
               </template>
-              <v-date-picker v-model="endDate" scrollable color="#00558c">
+              <v-date-picker v-model="endDate" scrollable color="#00558c"  @update:model-value="endDatePickerModal = false">
                 <v-spacer></v-spacer>
                 <v-btn text color="#00558c" @click="endDatePickerModal = false">Cancel</v-btn>
                 <v-btn text color="#00558c" @click="$refs.endDateDialog.save(endDate)">OK</v-btn>

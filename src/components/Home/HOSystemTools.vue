@@ -25,9 +25,9 @@
         <v-col>
             <h2 class="menuHeaders">Reconcile &amp; Pay Lock Settings</h2>
             <v-col>Unlock and Reset Reconcile &amp; Pay Invoices</v-col>
-            <router-link to="/recpay" class="menuLinks">
-            <v-btn color="#319B42" dark class="menuBtn">Reconcile &amp; Pay Lock Settings</v-btn>
-            </router-link>
+             <v-btn to="/recpay" color="#319B42" class="menuBtn mt-2">
+              Reconcile &amp; Pay Lock Settings
+            </v-btn>
         </v-col>
         </v-row>
 
@@ -101,3 +101,4 @@ export default {
   word-wrap: break-word !important;
 }
 </style>
+
