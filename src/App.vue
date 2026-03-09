@@ -353,14 +353,14 @@ import Log from "@/log.js";
 import emitter from "@/event-bus.js";
 import permissions from "@/permissions.js";
 import { HTTP_SA } from "@/HTTP-common.js";
-
+let tokTimeout = null;
 export default {
   mixins: [permissions],
   mounted() {
     this.refresh();
 
     emitter.on("cancelTokenRefresh", function () {
-      clearInterval(this.tokTimeout);
+      clearInterval(tokTimeout);
     });
 
     emitter.on("loggedOutDialogClosed", function () {
@@ -369,9 +369,9 @@ export default {
 
     emitter.on("setTokenTimer",  (token) => {
       if (token != null) {
-        clearInterval(this.tokTimeout);
+        clearInterval(tokTimeout);
 
-        this.tokTimeout = setInterval(() => {
+        tokTimeout = setInterval(() => {
           // console.log("About to refresh token.");
 
           HTTP_SA.get("Authentication/RefreshToken")

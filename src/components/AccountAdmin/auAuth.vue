@@ -355,7 +355,7 @@ export default {
 
         if (isValid) {
           this.$store.commit("setJWT", this.apiUserData.wsbApiAuthToken);
-          eventBus.$emit(
+          eventBus.emit(
             "setTokenTimer",
             this.apiUserData.wsbApiAuthToken
           );

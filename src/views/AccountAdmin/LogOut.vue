@@ -37,7 +37,7 @@ export default {
       } else if (this.$route.query.timedOut == "true") {
         this.$router.push("/login?login=" + curUserType + "&timedOut=true");
       } else {
-        $router.push("/?login=" + curUserType);
+        this.$router.push("/?login=" + curUserType);
       }
     } catch (e) {
       Log.logError(e, "LogOut.vue created");
