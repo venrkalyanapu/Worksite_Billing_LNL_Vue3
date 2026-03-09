@@ -101,6 +101,7 @@
           </ol>
           <br />
           <table class="left-margin-20">
+            <tbody>
             <tr>
               <td>
                 <b>Adjusted Premium Amount</b> is the amount that was deducted
@@ -118,9 +119,11 @@
                 from or added to your bill.
               </td>
             </tr>
+            </tbody>
           </table>
           <br />
           <table class="left-margin-20">
+            <tbody>
             <tr>
               <td colspan="4">
                 <span
@@ -155,9 +158,11 @@
               <td class="align-right">-2.76</td>
               <td><i>(Negative adjustment)</i></td>
             </tr>
+            </tbody>
           </table>
           <br />
           <table class="left-margin-20">
+            <tbody>
             <tr>
               <td colspan="4">
                 <span
@@ -192,6 +197,7 @@
               <td class="align-right">+4.24</td>
               <td><i>(Positive adjustment)</i></td>
             </tr>
+            </tbody>
           </table>
           <br /><b>Viewing All Policies On The Invoice</b> <br />You can page
           through all policies on your invoice by using the paging buttons at
