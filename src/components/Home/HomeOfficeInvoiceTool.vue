@@ -48,10 +48,13 @@
                   v-bind="props"
                 ></v-text-field>
               </template>
-              <v-date-picker v-model="dueDate" scrollable color="#00558c"  @update:model-value="dueDatePickerModal = false">
+              <v-date-picker v-model="dueDate" scrollable color="#00558c"  >
                 <v-spacer></v-spacer>
-                <v-btn text color="#00558c" @click="dueDatePickerModal = false">Cancel</v-btn>
-                <v-btn text color="#00558c" @click="$refs.dueDateDialog.save(dueDate)">OK</v-btn>
+                 <template v-slot:actions>
+                      <v-btn variant="text" color="#00558c" @click="dueDatePickerModal = false">Cancel</v-btn>
+                      <v-btn variant="text" color="#00558c"  @click="dueDatePickerModal = false">OK</v-btn>
+                 </template>
+                
               </v-date-picker>
             </v-dialog>
           </v-row>
@@ -79,10 +82,12 @@
                   :rules="startDateRules"
                 ></v-text-field>
               </template>
-              <v-date-picker v-model="startDate" scrollable color="#00558c"  @update:model-value="startDatePickerModal = false">
+              <v-date-picker v-model="startDate" scrollable color="#00558c"  >
                 <v-spacer></v-spacer>
-                <v-btn text color="#00558c" @click="startDatePickerModal = false">Cancel</v-btn>
-                <v-btn text color="#00558c" @click="$refs.startDateDialog.save(startDate)">OK</v-btn>
+                 <template v-slot:actions>
+                      <v-btn text color="#00558c" @click="startDatePickerModal = false">Cancel</v-btn>
+                     <v-btn text color="#00558c" @click="startDatePickerModal = false">OK</v-btn>
+                 </template>
               </v-date-picker>
             </v-dialog>
           </v-row>
@@ -106,10 +111,12 @@
                   v-bind="props"
                 ></v-text-field>
               </template>
-              <v-date-picker v-model="endDate" scrollable color="#00558c"  @update:model-value="endDatePickerModal = false">
+              <v-date-picker v-model="endDate" scrollable color="#00558c"  >
                 <v-spacer></v-spacer>
+                <template v-slot:actions>
                 <v-btn text color="#00558c" @click="endDatePickerModal = false">Cancel</v-btn>
-                <v-btn text color="#00558c" @click="$refs.endDateDialog.save(endDate)">OK</v-btn>
+                <v-btn text color="#00558c" @click="endDatePickerModal = false">OK</v-btn>
+                 </template>
               </v-date-picker>
             </v-dialog>
           </v-row>
@@ -145,7 +152,7 @@
                     'items-per-page-text': 'Display records per page: ' }"
         >
           <template v-slot:item.action="{ item }">
-            <v-tooltip top :color="mainColor">
+            <v-tooltip location="top"  content-class="bg-blue-darken-4 text-white opacity-100" >
               <template v-slot:activator="{ props }">
                 <v-icon
                   color="blue"
@@ -155,7 +162,7 @@
               </template>
               <span>Update Invoice</span>
             </v-tooltip>
-            <v-tooltip top :color="mainColor">
+            <v-tooltip location="top"  content-class="bg-blue-darken-4 text-white opacity-100">
               <template v-slot:activator="{ props }">
                 <v-icon color="orange" @click="deleteInvoice(item)" v-bind="props">mdi-trash-can-outline</v-icon>
               </template>
@@ -164,10 +171,10 @@
           </template>
           <template v-slot:footer.page-text="{pageStart, pageStop, itemsLength}">
             <div
-              :class="$vuetify.breakpoint.smAndDown?'v-data-footer__select smallFooter':'v-data-footer__select'"
+              :class="$vuetify.display.smAndDown?'v-data-footer__select smallFooter':'v-data-footer__select'"
             >
               <span
-                v-if="$vuetify.breakpoint.mdAndUp"
+                v-if="$vuetify.display.mdAndUp"
               >Viewing items: {{ pageStart }}-{{ pageStop }} of {{ itemsLength }}</span>
               <span style="margin-left: 10px;">Page:&nbsp;</span>
               <v-select
@@ -218,7 +225,7 @@ export default {
           to: "HOSystemTools",
         },
         {
-          text: "Invoice Maintenance",
+          title: "Invoice Maintenance",
           disabled: true,
         },
       ],
@@ -343,6 +350,13 @@ export default {
         }
       });
     },
+   money(value) {
+       if (!value) return '$0.00';
+      return new Intl.NumberFormat('en-US', { 
+        style: 'currency', 
+        currency: 'USD' 
+      }).format(value);
+   },
     formatDisplayItem(elem) {
       let item = {};
       item.invoiceId = elem.invoiceId ? elem.invoiceId : null;
@@ -351,8 +365,8 @@ export default {
         : null;
       item.paymentAmount = elem.paymentAmount ? elem.paymentAmount : null;
       item.displayPaymentAmount = elem.paymentAmount
-        ? Vue.options.filters.money(elem.paymentAmount)
-        : null;
+         ? this.money(elem.paymentAmount) 
+         : null;
       item.paymentDate = elem.paymentDate
         ? this.formatDate(new Date(elem.paymentDate))
         : null;
@@ -433,13 +447,13 @@ export default {
     },
     headers() {
       return [
-        { text: "Invoice Number", value: "invoiceId", align: "center" },
-        { text: "Invoice Due Date", value: "dueDate", align: "center" },
-        { text: "Amount Paid", value: "displayPaymentAmount", align: "center" },
-        { text: "Date Paid", value: "paymentDate", align: "center" },
+        { title: "Invoice Number", key: "invoiceId", align: "center" },
+        { title: "Invoice Due Date", key: "dueDate", align: "center" },
+        { title: "Amount Paid", key: "displayPaymentAmount", align: "center" },
+        { title: "Date Paid", key: "paymentDate", align: "center" },
         //{ text: "Status Code", value: "statusCode", align: "center" },
-        { text: "Status", value: "shortDesc", align: "center" },
-        { text: "Actions", value: "action", sortable: false, align: "center" },
+        { title: "Status", key: "shortDesc", align: "center" },
+        { title: "Actions", key: "action", sortable: false, align: "center" },
       ];
     },
   },

@@ -9,12 +9,14 @@
         </span>
       </v-card-title>
       <v-card-text>
-        <v-alert text color="success" v-if="showSuccessMessages" dismissible>
-          <v-row class="success-message">
-            <ul id="successMessage">
-              <li v-for="message in successMessages" v-bind:key="message">{{ message }}</li>
-            </ul>
-          </v-row>
+        <v-alert text color="success" v-if="showSuccessMessages" dismissible >
+                <div class="success-message">
+                  <ul id="successMessage" class="ps-5">
+                  <li v-for="message in successMessages" :key="message">
+                      {{ message }}
+                  </li>
+                  </ul>
+                </div>
         </v-alert>
 
         <v-alert text color="warning" v-if="showErrorMessages">
@@ -48,22 +50,23 @@
                 persistent
                 width="290px"
               >
-                <template v-slot:activator="{ on, attrs }">
+                <template v-slot:activator="{ props }">
                   <v-text-field
                     outlined
                     v-model="computedDateFormatted"
                     label="*Payment Date"
                     readonly
-                    v-bind="attrs"
-                    v-on="on"
+                    v-bind="props"
                     :rules="paymenyDateRules"
                     :disabled="isDeleteMode"
                   ></v-text-field>
                 </template>
                 <v-date-picker v-model="paymentDate" scrollable color="#00558c">
                   <v-spacer></v-spacer>
-                  <v-btn text color="#00558c" @click="datePickerModal = false">Cancel</v-btn>
-                  <v-btn text color="#00558c" @click="$refs.dialog.save(paymentDate)">OK</v-btn>
+                   <template v-slot:actions>
+                      <v-btn variant="text" color="#00558c"  @click="datePickerModal = false">Cancel</v-btn>
+                      <v-btn variant="text" color="#00558c" @click="datePickerModal = false">OK</v-btn>
+                    </template>
                 </v-date-picker>
               </v-dialog>
             </v-row>
@@ -88,20 +91,21 @@
         <v-spacer></v-spacer>
         <v-btn
           color="#319B42"
-          dark
+          theme="dark"
+          variant="flat"
           class="menuBtn"
           @click.stop="submit"
           v-show="!waiting && !isInvoiceDeleted"
         >{{ mode }}</v-btn>
         <v-btn class="menuBtn" v-show="waiting || isInvoiceDeleted">{{ mode }}</v-btn>
         <v-spacer></v-spacer>
-        <v-btn color="#319B42" dark class="menuBtn" @click.stop="close">Close</v-btn>
+        <v-btn color="#319B42" theme="dark" variant="flat" class="menuBtn" @click.stop="close">Close</v-btn>
         <v-spacer></v-spacer>
       </v-card-actions>
     </v-card>
     <v-progress-circular
       v-if="waiting"
-      :class="$vuetify.breakpoint.smAndDown ? 'waitCircleSm' : 'waitCircle'"
+      :class="$vuetify.dispaly.smAndDown ? 'waitCircleSm' : 'waitCircle'"
       indeterminate
       color="#319B42"
       :size="100"
@@ -162,10 +166,19 @@ export default {
   },
   methods: {
     formatDate(date) {
-      if (!date) return null;
-
-      const [year, month, day] = date.split("-");
-      return `${month}/${day}/${year}`;
+     if (!date) return null
+      if (date instanceof Date) {
+        const month = (date.getMonth() + 1).toString().padStart(2, '0')
+        const day = date.getDate().toString().padStart(2, '0')
+        const year = date.getFullYear()
+        return `${month}/${day}/${year}`
+      }
+      if (typeof date === 'string') {
+        const [year, month, day] = date.split('-')
+        return `${month}/${day}/${year.substr(0,4)}`
+      }
+      
+      return null
     },
     cleanup() {
       this.waiting = false;
@@ -289,7 +302,7 @@ export default {
         if (responseData.statusCode == 200) {
           this.isInvoiceDeleted = true;
           this.setSuccessMessages("Invoice has been deleted successfully.");
-          eventBus.$emit(
+          eventBus.emit(
             "invoiceDeleted",
             responseData.franchiseInvoiceDetails[0]
           );
@@ -321,7 +334,7 @@ export default {
         let responseData = response.data;
         if (responseData.statusCode == 200) {
           this.setSuccessMessages("Invoice has been updated successfully.");
-          eventBus.$emit(
+          eventBus.emit(
             "invoiceUpdated",
             responseData.franchiseInvoiceDetails[0]
           );
