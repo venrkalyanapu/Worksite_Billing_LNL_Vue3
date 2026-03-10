@@ -286,7 +286,12 @@ export default {
         this.showSuccessMessages = true;
       }
     },
-    deleteFranchiseInvoice() {
+    async deleteFranchiseInvoice() {
+      const { valid } = await this.$refs.form.validate();
+
+      // This prevents showing the "Administrator" error if  fields are empty or invalid.
+      if (!valid) return;
+
       this.waiting = true;
       this.showSuccessMessages = false;
       this.successMessages = [];
@@ -317,7 +322,10 @@ export default {
         }
       });
     },
-    updateFranchiseInvoice() {
+    async updateFranchiseInvoice() {
+      const { valid } = await this.$refs.form.validate();
+      // This prevents showing the "Administrator" error if  fields are empty or invalid.
+       if (!valid) return;
       this.waiting = true;
       this.showSuccessMessages = false;
       this.successMessages = [];

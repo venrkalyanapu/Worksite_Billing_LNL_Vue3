@@ -33,7 +33,7 @@
 
         <v-row no-gutters class="mb-6" v-if="showConfiguration">
         <v-col :cols="$vuetify.display.smAndDown?2:1">
-            <v-icon color="#00558c" size="50">mdi-settings</v-icon>
+            <v-icon color="#00558c" size="50">mdi-cog</v-icon>
         </v-col>
         <v-col>
             <h2 class="menuHeaders">Settings</h2>
