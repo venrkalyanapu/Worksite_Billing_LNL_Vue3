@@ -24,7 +24,8 @@
           style="padding-bottom:0px !important; margin-bottom:0px !important;"
         >
           <v-text-field
-            solo
+            variant="solo"
+            rounded
             v-model="search"
             label="Search Invoices For..."
             class="roundedTextBox"
@@ -45,7 +46,8 @@
             style="min-width: 200px;max-width:300px;margin-bottom:0px;padding-bottom:0px;margin-top: 10px;"
             @change.passive="$refs['searchRef'].$el.focus()"
             v-on:keyup.enter="$refs['searchRef'].$el.focus()"
-            solo
+            variant="solo"
+            rounded
           ></v-select>
         </span>
         <v-btn
@@ -78,7 +80,8 @@
             <v-col :cols="12" align="center">
               <!-- <span class="searchHeader">Search Invoices for:</span> -->
               <v-text-field
-                solo
+                variant="solo"
+                rounded
                 v-model="search"
                 label="Search Invoices for..."
                 class="roundedTextBox"
@@ -99,7 +102,8 @@
                 class="roundedTextBox"
                 @change.passive="$refs['searchRef'].$el.focus()"
                 v-on:keyup.enter="$refs['searchRef'].$el.focus()"
-                solo
+                variant="solo"
+               rounded
               ></v-select>
             </v-col>
           </v-row>

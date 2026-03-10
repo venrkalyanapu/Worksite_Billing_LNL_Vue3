@@ -10,7 +10,8 @@
         <v-col lg="3" xl="3" md="4" sm="4">
           <v-row>
             <v-text-field
-              solo
+              variant="solo"
+              rounded
               label="*Account Number"
               v-model="franchiseId"
               append-icon="search"
@@ -40,7 +41,8 @@
             >
               <template v-slot:activator="{ props }">
                 <v-text-field
-                  solo
+                  variant="solo"
+                  rounded
                   class="roundedTextBox search-text-box"
                   v-model="dueDateFormatted"
                   label="Due Date"
@@ -73,7 +75,8 @@
             >
               <template v-slot:activator="{ props }">
                 <v-text-field
-                  solo
+                  variant="solo"
+                  rounded
                   class="roundedTextBox search-text-box pad-right"
                   v-model="startDateFormatted"
                   label="From"
@@ -103,7 +106,8 @@
             >
               <template v-slot:activator="{ props }">
                 <v-text-field
-                  solo
+                  variant="solo"
+                  rounded
                   class="roundedTextBox search-text-box"
                   v-model="endDateFormatted"
                   label="To"

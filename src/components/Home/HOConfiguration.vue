@@ -23,10 +23,10 @@
             >
             <template v-slot:footer.page-text="{pageStart, pageStop, itemsLength}">
                 <div
-                :class="$vuetify.breakpoint.smAndDown?'v-data-footer__select smallFooter':'v-data-footer__select'"
+                :class="$vuetify.display.smAndDown?'v-data-footer__select smallFooter':'v-data-footer__select'"
                 >
                 <span
-                    v-if="$vuetify.breakpoint.mdAndUp"
+                    v-if="$vuetify.display.mdAndUp"
                 >Viewing items: {{ pageStart }}-{{ pageStop }} of {{ itemsLength }}</span>
                 <span style="margin-left: 10px;">Page:&nbsp;</span>
                 <v-select
@@ -66,7 +66,7 @@ export default {
                 to: "HOSystemTools"
                 },        
                 {
-                    text: 'Settings',
+                    title: 'Settings',
                     disabled: true
                 },
             ],
@@ -118,9 +118,9 @@ export default {
         },
         headers() {
         return [
-            { text: "Id", value: "configurationId" },
-            { text: "Key", value: "configurationKey" },
-            { text: "Value", value: "configurationValue" },
+            { title: "Id", key: "configurationId" },
+            { title: "Key", key: "configurationKey" },
+            { title: "Value", key: "configurationValue" },
             ];
         }
 

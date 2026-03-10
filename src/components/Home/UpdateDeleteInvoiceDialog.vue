@@ -20,11 +20,11 @@
         </v-alert>
 
         <v-alert text color="warning" v-if="showErrorMessages">
-          <v-row class="error-message">
-            <ul id="errorMessage">
-              <li v-for="message in errorMessages" v-bind:key="message">{{ message }}</li>
+          <div class="error-message">
+            <ul id="errorMessage" class="ps-4">
+              <li v-for="message in errorMessages" :key="message">{{ message }}</li>
             </ul>
-          </v-row>
+          </div>
         </v-alert>
 
         <v-form ref="form">
@@ -34,7 +34,8 @@
                 label="*Payment Amount"
                 v-model="paymentAmount"
                 dense
-                outlined
+                variant="outlined" 
+                color="primary"
                 :disabled="isDeleteMode"
                 ref="paymentAmount"
                 :rules="paymenyAmountRules"
@@ -52,7 +53,8 @@
               >
                 <template v-slot:activator="{ props }">
                   <v-text-field
-                    outlined
+                    variant="outlined" 
+                    color="primary"
                     v-model="computedDateFormatted"
                     label="*Payment Date"
                     readonly
@@ -76,7 +78,8 @@
                 v-model="comment"
                 auto-grow
                 dense
-                outlined
+                variant="outlined" 
+                color="primary"
                 ref="comment"
                 :rules="commentRules"
                 required
