@@ -234,7 +234,7 @@
             <hr width="90%" />
           </v-row>
 
-          <v-card-text>Are you sure you want to log out?</v-card-text>
+          <v-card-text class="alerttext" style="margin-top:20px !important;">Are you sure you want to log out?</v-card-text>
 
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -276,7 +276,7 @@
           <hr width="90%" />
         </v-row>
 
-        <v-card-text>
+        <v-card-text class="alerttext" style="margin-top:20px !important;">
           Your session is about to end. If you are still working, please click
           OK to continue.
         </v-card-text>
@@ -286,7 +286,7 @@
           <v-btn
             color="#319B42"
             variant="flat"
-            class="menuBtn"
+            class="menuBtn alertbtn"
             @click="
               activeCheckDialog = false;
               refresh();
@@ -319,7 +319,7 @@
           <hr width="90%" />
         </v-row>
 
-        <v-card-text>{{
+        <v-card-text class="alerttext" style="margin-top:20px !important;">{{
           appError
             ? appError.message
             : "There was an error, please contact your administrator."
@@ -353,25 +353,25 @@ import Log from "@/log.js";
 import emitter from "@/event-bus.js";
 import permissions from "@/permissions.js";
 import { HTTP_SA } from "@/HTTP-common.js";
-let tokTimeout = null;
+
 export default {
   mixins: [permissions],
   mounted() {
     this.refresh();
 
-    emitter.on("cancelTokenRefresh", function () {
-      clearInterval(tokTimeout);
+    emitter.on("cancelTokenRefresh", () => {
+      clearInterval(this.tokTimeout);
     });
 
-    emitter.on("loggedOutDialogClosed", function () {
+    emitter.on("loggedOutDialogClosed", () => {
       this.logOutDialog = false;
     });
 
     emitter.on("setTokenTimer",  (token) => {
       if (token != null) {
-        clearInterval(tokTimeout);
+        clearInterval(this.tokTimeout);
 
-        tokTimeout = setInterval(() => {
+        this.tokTimeout = setInterval(() => {
           // console.log("About to refresh token.");
 
           HTTP_SA.get("Authentication/RefreshToken")
@@ -804,7 +804,7 @@ export default {
             this.secondaryTimeout = setTimeout(() => {
               if (this.activeCheckDialog) {
                 if (this.$refs.activeCheckDialog) {
-                  this.$refs.activeCheckDialog.removeOverlay();
+                  this.$refs.activeCheckDialog.removeOverlay;
                 }
                 this.activeCheckDialog = false;
 

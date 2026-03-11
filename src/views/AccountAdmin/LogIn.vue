@@ -36,7 +36,7 @@
             <hr width="90%" />
           </v-layout>
 
-          <v-card-text>
+          <v-card-text class="alerttext">
             You have been automatically logged out due to inactivity. Please log
             in again to continue.
           </v-card-text>
@@ -46,7 +46,7 @@
             <v-btn
               color="#319B42"
               dark
-              class="menuBtn"
+              class="menuBtn alertbtn"
               @click.stop="closeLoggedOutDialog()"
               >OK</v-btn
             >
@@ -73,14 +73,14 @@
             <hr width="90%" />
           </v-layout>
 
-          <v-card-text> Please re-log in to continue. </v-card-text>
+          <v-card-text class="alerttext"> Please re-log in to continue. </v-card-text>
 
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
               color="#319B42"
               dark
-              class="menuBtn"
+              class="menuBtn alertbtn"
               @click.stop="closeForbiddenDialog()"
               >OK</v-btn
             >
@@ -128,7 +128,7 @@ export default {
   },
   methods: {
     closeLoggedOutDialog() {
-      this.$refs.loggedOutDialog.removeOverlay();
+      this.$refs.loggedOutDialog.removeOverlay;
       emitter.emit("loggedOutDialogClosed");
 
       let elements = document.getElementsByClassName("v-overlay--active");
@@ -140,7 +140,7 @@ export default {
       this.loggedOutDialog = false;
     },
     closeForbiddenDialog() {
-      this.$refs.forbiddenDialog.removeOverlay();
+      this.$refs.forbiddenDialog.removeOverlay;
 
       let elements = document.getElementsByClassName("v-overlay--active");
 
