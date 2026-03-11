@@ -3,10 +3,10 @@
    <v-breadcrumbs :items="breadcrumbItems"></v-breadcrumbs>
 
 <v-row justify="center" align-content="center" align="center">
-  <v-tabs :centered="true" >
-    <v-tab color=#1976d2  readonly >Users & Roles</v-tab>
+  <v-tabs  v-model="tab" :centered="true" >
+    <v-tab color=#1976d2   >Users & Roles</v-tab>
     
-    <v-tab v-if="showLinkTab" value="links">
+    <v-tab v-if="showLinkTab" >
       <v-badge 
         color="orange" 
         :content="activeLinks" 
@@ -18,30 +18,28 @@
   </v-tabs>
 </v-row>
 <div class="my-6"></div>
-
-    <v-window v-model="tab" justify-center align-content-center align-center class="tabs">
-      <v-window-item>
+<v-tabs-window v-model="tab" class="tabs  justify-center align-center">
+<v-tabs-window-item >
         <v-row justify="center" align-content="center" align="center">
         <v-col cols="11">
                 <v-alert v-if="showSuccessMessages" color="success"  variant="tonal" closableclass="mb-4">
-  
-  <div class="success-message">
-    <ul id="successMessage" class="ps-5 mb-0" style="color: inherit; font-size: 16px;">
-      <li v-for="message in successMessages" :key="message">
-        {{ message }}
-      </li>
-    </ul>
-  </div>
-</v-alert>
+                    <div class="success-message">
+                        <ul id="successMessage" class="ps-5 mb-0" style="color: inherit; font-size: 16px;">
+                        <li v-for="message in successMessages" :key="message">
+                            {{ message }}
+                        </li>
+                        </ul>
+                    </div>
+                </v-alert>
 
                 <v-alert text color="warning" v-if="showErrorMessages">
-                    <v-row class="error-message">
-                        <ul id="errorMessage">
-                            <li v-for="message in errorMessages" v-bind:key="message">
+                    <div class="error-message">
+                        <ul id="errorMessage" class="ps-5 mb-0" style="color: inherit; font-size: 16px;">
+                            <li v-for="message in errorMessages" :key="message">
                                 {{ message }}
                             </li>
                         </ul>
-                    </v-row>
+                    </div>
                 </v-alert>
 
                 <v-data-table
@@ -81,10 +79,10 @@
                 </template>
                 <template v-slot:footer.page-text="{pageStart, pageStop, itemsLength}">
                     <div
-                    :class="$vuetify.display.smAndDown?'v-data-footer__select smallFooter':'v-data-footer__select'"
+                    :class="$vuetify.breakpoint.smAndDown?'v-data-footer__select smallFooter':'v-data-footer__select'"
                     >
                     <span
-                        v-if="$vuetify.display.mdAndUp"
+                    v-if="$vuetify.breakpoint.mdAndUp"
                     >Viewing items: {{ pageStart }}-{{ pageStop }} of {{ itemsLength }}</span>
                     <span style="margin-left: 10px;">Page:&nbsp;</span>
                     <v-select
@@ -107,9 +105,9 @@
                 <AddUpdateUserRoleDialog ref="editDialog" :franchiseId="franchiseId" :franchiseName="franchiseName" :canEditUserRole="canEditUserRole" 
                 :managedUsers="managedUsers" :existingRoles="items"/>
             </v-row>
-      </v-window-item>
+      </v-tabs-window-item>
       <!-- link tab -->
-      <v-window-item v-if="showLinkTab">
+      <v-tabs-window-item v-if="showLinkTab">
         <v-row justify="center" align-content="center" align="center">
         <v-col cols="11">
             <v-data-table
@@ -172,8 +170,8 @@
             </v-data-table>
         </v-col>
         </v-row>
-      </v-window-item>
-    </v-window>    
+      </v-tabs-window-item>
+    </v-tabs-window>    
 
     <v-progress-circular
       v-if="waiting"

@@ -163,7 +163,7 @@
         
         <v-dialog v-model="dialog" persistent max-width="550px">
             <template v-slot:activator="{ props }">
-                <v-btn color="#319B42" dark size="large" class="menuBtn  mt-10 mb-10 px-6" v-bind="props" @click="addNewUser" style="display: flex; margin-left: auto; margin-right: auto;" cv-show="allowCreateUser && (existingRolesCount > 0)">Create New User</v-btn>
+                <v-btn color="#319B42" dark size="large" class="menuBtn  mt-9 mb-8 px-6" v-bind="props" @click="addNewUser" style="display: flex; margin-left: auto; margin-right: auto;" cv-show="allowCreateUser && (existingRolesCount > 0)">Create New User</v-btn>
                 <v-btn size="large"  class="menuBtn mt-2"  v-show="!allowCreateUser || (existingRolesCount == 0)">Create New User</v-btn>
             </template>
             <v-card>
@@ -219,7 +219,7 @@
                 <v-form ref="form">
                     <v-container>
                         <v-row>
-                            <v-text-field label="*User Email address (Log-in ID)" v-model="userName" dense outlined
+                            <v-text-field label="*User Email address (Log-in ID)" v-model="userName"  variant="outlined" density="compact"
                             :readonly="isUpdateMode" v-on:keyup="onChange" ref="emailId" :rules='emailIdRules' required
                             ></v-text-field>                                       
                         </v-row>
@@ -230,10 +230,10 @@
                         </v-select>                    
                         </v-row>
                         <v-row>
-                            <v-text-field label="*First Name" v-model="firstName" dense outlined :rules='firstNameRules' required></v-text-field>
+                            <v-text-field label="*First Name" v-model="firstName" variant="outlined" density="compact" :rules='firstNameRules' required></v-text-field>
                         </v-row>
                         <v-row>
-                            <v-text-field label="*Last Name" v-model="lastName" dense outlined :rules='lastNameRules' required></v-text-field>
+                            <v-text-field label="*Last Name" v-model="lastName"  variant="outlined" density="compact" :rules='lastNameRules' required></v-text-field>
                         </v-row>
                         <v-row v-if="isUpdateMode">
                             <v-btn class="menuBtn" style="background-color:unset; margin-right:10px; width:100%;" @click.stop="showPhoneInput = true">Add/Update Mobile Number<v-icon>mdi-arrow-right</v-icon></v-btn>
