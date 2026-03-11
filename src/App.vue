@@ -199,7 +199,7 @@
           </span>
         </v-col>
         <v-col>
-          <v-row justify-end>
+          <v-row justify="end">
             <span class="footerText">&copy;{{ currentYear }} Globe Life {{ currentVersion }}</span>
           </v-row>
         </v-col>
