@@ -601,6 +601,7 @@
                   ? 'Please contact Worksite Customer Service at 1-888-488-0134, select Option #2.'
                   : 'No policies found.'
               "
+              items-per-page-text="Display records per page:"
               :footer-props="{
                 'items-per-page-options': [10, 25, 50, 100, 200, -1],
                 'show-current-page': true,
@@ -1187,11 +1188,12 @@
             must-sort
             no-data-text="No adjustments found."
              :items-per-page="10"
-    items-per-page-text="Items per page:"
+    items-per-page-text="Display records per page:"
     :items-per-page-options="[5, 10, 25, 50]"
     :show-first-last-page="true"
     first-icon="mdi-arrow-collapse-left"
     last-icon="mdi-arrow-collapse-right"
+   
             :footer-props="{
               'items-per-page-options': [10, 25, 50, 100, 200, -1],
               'show-current-page': true,
@@ -1352,6 +1354,7 @@
               style="margin-left: 20px; margin-right: 20px; width: 100%"
                 v-model:sort-by="sortBydueDate"
               no-data-text="No scheduled invoices found."
+               items-per-page-text="Display records per page:"
               :footer-props="{
                 'items-per-page-options': [10, 25, 50, 100, 200, -1],
                 'show-current-page': true,
@@ -2270,7 +2273,7 @@
               item-key="item.index"
               dark
               v-model:sort-by="sortBydueDate"
-              
+               items-per-page-text="Display records per page:"
               no-data-text="No scheduled invoices found."
               :footer-props="{
                 'items-per-page-options': [10, 25, 50, 100, 200, -1],
@@ -2370,6 +2373,7 @@
                 :max-height="520"
                 dark
                 style="margin-left: 20px; margin-right: 20px"
+                 items-per-page-text="Display records per page:"
                 :footer-props="{
                   'items-per-page-options': [10, 25, 50, 100, 200, -1],
                   'show-current-page': true,
