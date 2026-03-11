@@ -1,6 +1,10 @@
 <template>
   <div>
-    <v-breadcrumbs :items="breadcrumbItems" v-if="showBreadCrumbs"></v-breadcrumbs>
+    <v-breadcrumbs :items="breadcrumbItems" style="color:#1976d2" v-if="showBreadCrumbs">
+        <template v-slot:title="{ item }">
+      {{ item.text }}
+    </template>
+    </v-breadcrumbs>
 
     <v-row>
       <v-col v-if="$vuetify.display.mdAndUp"></v-col>

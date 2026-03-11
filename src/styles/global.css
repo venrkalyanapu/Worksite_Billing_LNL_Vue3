@@ -399,3 +399,7 @@ td.v-data-table__mobile-row:nth-child(even) {
 .blue-icon-text-field .v-field__prepend-inner .v-icon {
   color: blue;
 }
+.v-data-table-footer{
+  background-color: rgb(68, 171, 168) !important; 
+  color: white !important;
+}

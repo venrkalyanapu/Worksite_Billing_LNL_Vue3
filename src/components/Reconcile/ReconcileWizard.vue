@@ -579,7 +579,7 @@
                 margin-right: 0px;
                 padding-left: 0px;
                 padding-right: 0px;
-               background-color: rgb(68, 171, 168) !important; color: white !important;
+               
               "
               :loading="searching"
               page-by="item"
