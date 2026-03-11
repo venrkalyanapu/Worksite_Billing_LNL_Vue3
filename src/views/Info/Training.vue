@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-layout justify="center" align-content="center">
+    <v-row justify="center" align-content="center">
       <v-container>
         <v-col cols="10">
         <v-card class="mx-auto">
@@ -14,7 +14,7 @@
           </header>
           <br />
           <br />
-          <v-layout justify="center" align-content="center" row>
+          <v-row justify="center" align-content="center" >
             <v-container>
              <v-col cols="10">
               <div class='embed-container'>
@@ -24,12 +24,12 @@
               </div>
              </v-col>
             </v-container>
-          </v-layout>
+          </v-row>
           <br />
         </v-card>
         </v-col>
       </v-container>
-    </v-layout>
+    </v-row>
 </div>
 </template>
 <style scoped>

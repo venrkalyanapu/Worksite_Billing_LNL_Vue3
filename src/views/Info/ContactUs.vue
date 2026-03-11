@@ -1,10 +1,10 @@
 <template>
   <div>
-    <v-layout justify="center" align-content="center" align="center"  row wrap>
+    <v-row justify="center" align-content="center" align="center"   wrap>
       <v-col cols="10" class="padding">
         <ContactUs />
       </v-col>
-    </v-layout>
+    </v-row>
   </div>
 </template>
 
