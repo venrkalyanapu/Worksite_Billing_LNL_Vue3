@@ -34,11 +34,13 @@
         item-key="item.index"
         :items-per-page.sync="itemsPerPage"
         @pagination="updatePagination"
+        
         dark
         :sort-by.sync="sortBy"
         must-sort
         :page.sync="page"
         :no-data-text="noDataDisplayText"
+         items-per-page-text="Display records per page:"
         :footer-props="{
             'items-per-page-options': [10, 25, 50, 100, 200,-1] ,
             'show-current-page': true,
@@ -55,7 +57,7 @@
             @click="selectCompany(item)"
           >mdi-chevron-double-right</v-icon>
         </template>
-        <template v-slot:footer.page-text="{pageStart, pageStop, itemsLength}">
+      <template v-slot:footer.page-text="{pageStart, pageStop, itemsLength}">
           <div
             :class="$vuetify.display.smAndDown?'v-data-footer__select smallFooter':'v-data-footer__select'"
           >
@@ -428,4 +430,5 @@ export default {
 .exportText {
   font-size: 0.75rem;
 }
+
 </style>

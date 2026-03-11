@@ -1,6 +1,6 @@
 <template>
   <span>
-   <v-breadcrumbs :items="breadcrumbItems"></v-breadcrumbs>
+   <v-breadcrumbs :items="breadcrumbItems" style="color:#1976d2"></v-breadcrumbs>
 
 <v-row justify="center" align-content="center" align="center">
   <v-tabs  v-model="tab" :centered="true" >

@@ -7,14 +7,14 @@
         align-content="center"
         justify="center"
       >
-        <v-col lg="3" xl="3" md="4" sm="4">
+        <v-col lg="3" xl="3" md="4" sm="4" style="margin-left:20px !important;">
           <v-row>
             <v-text-field
               variant="solo"
               rounded
               label="*Account Number"
               v-model="franchiseId"
-              append-icon="search"
+               append-inner-icon="mdi-magnify"
               class="roundedTextBox search-text-box"
               :rules="franchiseIdRules"
               required
@@ -61,7 +61,7 @@
             </v-dialog>
           </v-row>
         </v-col>
-        <v-col lg="3" xl="2" md="3" sm="3" align="right">
+        <v-col lg="2" xl="2" md="3" sm="3" align="right">
           <span>Payment Date</span>
         </v-col>
         <v-col lg="1" xl="1" md="2" sm="2">
