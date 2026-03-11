@@ -582,6 +582,7 @@
                
               "
               :loading="searching"
+              
               item-key="item.index"
               item-value ="item.name"
               :items-per-page.sync="itemsPerPage"
@@ -1457,7 +1458,7 @@
           large
           :color="$store.state.mainColor"
           dark
-          @click.stop="moveToStep(stepperPage - 1)"
+          @click.stop="moveToStep(stepperPage - 1); openAllgroupby();"
           v-if="
             stepperPage != stepperDefs.invoiceAdjustments &&
             stepperPage != stepperDefs.complete
@@ -1473,7 +1474,7 @@
           large
           :color="$store.state.mainColor"
           dark
-          @click.stop="switchStep(stepperPage - 1)"
+          @click.stop="switchStep(stepperPage - 1);"
           v-if="
             stepperPage != stepperDefs.invoiceAdjustments &&
             stepperPage != stepperDefs.complete
@@ -1489,8 +1490,8 @@
           large
           :color="$store.state.mainColor"
           dark
-          style="margin-right: 10px;margin-top:10px"
-          @click.stop="loadScheduledInvoices()"
+          style="margin-right: 10px;"
+          @click.stop="loadScheduledInvoices(); openAllgroupby()"
           v-if="
             (!isLocked ||
               (isLocked == true && hasLock) ||
@@ -1647,7 +1648,7 @@
           :color="$store.state.mainColor"
           dark
           @click.stop="reloadCurrentInvoice"
-          style="margin-right: 10px"
+          style="margin-right: 10px;"
           v-if="
             lockedBy == 'scheduled' &&
             stepperPage == stepperDefs.invoiceAdjustments
@@ -2230,6 +2231,7 @@
               @click="
                 deleteScheduledInvoice();
                 deleteScheduledInvoiceDialog = false;
+                openAllgroupby();
               "
               >Yes</v-btn
             >
@@ -2652,7 +2654,7 @@ import { onMounted, ref , nextTick} from 'vue';
   header.toggleGroup(header.item);
   })
  }
-  if(isreviewdatatable)
+  if(isreviewdatatable || reviewgroupHeaders.value != null)
  {
   //console.log("reviewgroupHeaders.value" + reviewgroupHeaders.value);
  Object.values(reviewgroupHeaders.value).forEach(header => {
@@ -2660,11 +2662,14 @@ import { onMounted, ref , nextTick} from 'vue';
   })
  }
 
+
  
   }, 1000)
   //showitemsPerPage =10;
  }
-
+const loadItems = async ({ page, itemsPerPage, sortBy }) => {
+  openAllgroupby(false);
+};
 </script>
 <script>
 import emitter from "@/event-bus.js";
@@ -5941,6 +5946,7 @@ export default {
       return amt;
     },
     switchStep(newStep, fromStepperBtn) {
+   
       if (
         this.stepperPage == this.stepperDefs.reviewChanges &&
         newStep == this.stepperDefs.processPayment &&
