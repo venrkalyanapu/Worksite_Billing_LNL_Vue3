@@ -63,6 +63,7 @@
           must-sort
           :page.sync="page"
           no-data-text="No registration link found."
+          items-per-page-text="Display records per page:"
           :footer-props="{
                 'items-per-page-options': [10, 25, 50, 100, 200,-1] ,
                 'show-current-page': true,

@@ -208,7 +208,7 @@
     
       :sort-desc="true"
       must-sort
-     
+     items-per-page-text="Display records per page:"
     >
       <!-- <template v-slot:footer.page-text="{ pageStart, pageStop, itemsLength }">
         <div
