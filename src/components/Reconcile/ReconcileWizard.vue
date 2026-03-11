@@ -579,10 +579,10 @@
                 margin-right: 0px;
                 padding-left: 0px;
                 padding-right: 0px;
-               
+               background-color: rgb(68, 171, 168) !important; color: white !important;
               "
               :loading="searching"
-              
+              page-by="item"
               item-key="item.index"
               item-value ="item.name"
               :items-per-page.sync="itemsPerPage"
@@ -592,6 +592,9 @@
               :sort-by="sortBy"
               :sort-desc.sync="descending"
               :page.sync="page"
+              
+              variant="flat"
+                
               must-sort
               :no-data-text="
                 pastDue
@@ -1177,7 +1180,7 @@
             item-key="item.index"
             :items-per-page.sync="itemsPerPage"
             dark
-             
+             page-by="item"
             :sort-by="sortBy"
             :sort-desc.sync="descending"
             :page.sync="page"
