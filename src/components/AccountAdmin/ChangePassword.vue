@@ -14,30 +14,30 @@
   v-if="showSuccessMessages"
   color="success"
   variant="tonal"
-  closable
+  class="pa-4"
 >
-  <v-row class="success-message">
+  <div class="success-message">
     <ul id="successMessage">
       <li v-for="message in successMessages" :key="message">
         {{ message }}
       </li>
     </ul>
-  </v-row>
+  </div>
 </v-alert>
 
             <v-alert
   v-if="showErrorMessages"
   color="warning"
   variant="tonal"
-  closable
+  class="pa-4"
 >
-  <v-row class="error-message">
+  <div class="error-message">
     <ul id="errorMessage">
       <li v-for="message in errorMessages" :key="message">
         {{ message }}
       </li>
     </ul>
-  </v-row>
+  </div>
 </v-alert>
 
             <v-form ref="form">
@@ -75,7 +75,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="#f1f3f1" there="dark" class="menuBtn" @click="changePassword" v-show="!showSuccessMessages">Change Password</v-btn>
-                <v-btn color="#319B42" there="dark" class="menuBtn" @click="returnLogin" v-show="showSuccessMessages">Return to Login</v-btn>
+                <v-btn color="#f1f3f1" there="dark" class="menuBtn" @click="returnLogin" v-show="showSuccessMessages">Return to Login</v-btn>
             </v-card-actions>
 
         <v-progress-circular

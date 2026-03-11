@@ -41,7 +41,7 @@
                   <v-container grid-list-md text-xs-center>
                     <v-row  wrap>
                       <v-col cols="9">
-                        <v-text-field label="*one-time code" v-model="pincode" outlined single-line autofocus :rules="pinCodeRules" v-mask="'######'"
+                        <v-text-field label="*one-time code" v-model="pincode" density="compact" variant="outlined" single-line autofocus :rules="pinCodeRules" v-mask="'######'"
                          v-on:keypress.enter.prevent hide-spin-buttons />
                       </v-col>
                     <v-col cols="3">
@@ -106,24 +106,24 @@
             </v-col>
             </header>
             <v-card-text>
-            <v-alert text color="success" v-if="showSuccessMessages" dismissible>
-                <v-row class="success-message">
+            <v-alert text color="success" v-if="showSuccessMessages" class="pa-4">
+                <div class="success-message">
                     <ul id="successMessage">
                         <li v-for="message in successMessages" v-bind:key="message">
                             {{ message }}
                         </li>
                     </ul>
-                </v-row>
+                  </div>
             </v-alert>
 
             <v-alert text color="warning" v-if="showErrorMessages">
-                <v-row class="error-message">
+                <div class="error-message">
                     <ul id="errorMessage">
                         <li v-for="message in errorMessages" v-bind:key="message">
                             {{ message }}
                         </li>
                     </ul>
-                </v-row>
+                  </div>
             </v-alert>
 
             <v-form ref="form">
