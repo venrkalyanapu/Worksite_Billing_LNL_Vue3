@@ -1,115 +1,91 @@
 <template>
-  <VRow justify="center" align="center">
-    <VCol cols="11">
+  <v-layout justify="center" align-content="center" align="center" style="position:unset !important;">
+    <v-col cols="11">
+      <v-layout align="end" align-content="end" justify="end" v-if="showExportOptions">
+      <span class="exportText">
+        <i>
+          Download Company List
+          <v-icon x-small>mdi-arrow-right</v-icon>&nbsp;
+        </i>
+      </span>        
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-icon @click="exportCompany('Excel')" color="#319B42" dark v-on="on">mdi-file-excel</v-icon>
+        </template>
+        <span>Download as Excel</span>
+      </v-tooltip>
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-icon
+            @click="exportCompany('PDF')"
+            color="#ED722F"
+            dark
+            v-on="on"
+          >mdi-file-pdf-outline</v-icon>
+        </template>
+        <span>Download as PDF</span>
+      </v-tooltip>
+    </v-layout>
 
-      <!-- Export Buttons -->
-      <VRow
-        v-if="showExportOptions"
-        justify="end"
-        align="center"
-        class="mb-2"
-      >
-        <span class="exportText">
-          <i>
-            Download Company List
-            <VIcon size="14">mdi-arrow-right</VIcon>&nbsp;
-          </i>
-        </span>
-
-        <!-- Excel -->
-        <VTooltip text="Download as Excel" location="top">
-          <template #activator="{ props }">
-            <VIcon
-              v-bind="props"
-              @click="exportCompany('Excel')"
-              color="#319B42"
-            >
-              mdi-file-excel
-            </VIcon>
-          </template>
-        </VTooltip>
-
-        <!-- PDF -->
-        <VTooltip text="Download as PDF" location="top">
-          <template #activator="{ props }">
-            <VIcon
-              v-bind="props"
-              @click="exportCompany('PDF')"
-              color="#ED722F"
-            >
-              mdi-file-pdf-outline
-            </VIcon>
-          </template>
-        </VTooltip>
-      </VRow>
-
-      <!-- Data Table -->
-      <VDataTable
+      <v-data-table
         :headers="headers"
         :items="filteredItems"
         class="elevation-3"
-        :items-per-page="itemsPerPage"
-        @update:options="updatePagination"
-        :sort-by="sortBy"
+        item-key="item.index"
+        :items-per-page.sync="itemsPerPage"
+        @pagination="updatePagination"
+        dark
+        :sort-by.sync="sortBy"
         must-sort
-        :page="page"
+        :page.sync="page"
         :no-data-text="noDataDisplayText"
-        :items-per-page-options="[
-          { value: 10, title: '10' },
-          { value: 25, title: '25' },
-          { value: 50, title: '50' },
-          { value: 100, title: '100' },
-          { value: -1, title: 'All' }
-        ]"
-        show-first-last-page
+        :footer-props="{
+            'items-per-page-options': [10, 25, 50, 100, 200,-1] ,
+            'show-current-page': true,
+            'show-first-last-page': true,
+            'items-per-page-text': 'Display records per page: ' }"
       >
-
-        <!-- Link Column -->
-        <template #item.link="{ item }">
+        <template v-slot:item.link="{ item }">
           <span class="viewLink" @click="selectCompany(item)">select</span>
-          <VIcon
+          <v-icon
             color="#319B42"
-            size="16"
+            small
             class="viewLink"
             style="margin-left:3px;margin-bottom:3px;"
             @click="selectCompany(item)"
-          >
-            mdi-chevron-double-right
-          </VIcon>
+          >mdi-chevron-double-right</v-icon>
         </template>
-
-        <!-- Footer -->
-        <template #bottom>
-          <div class="d-flex align-center justify-end pa-2">
-            <span>Viewing items: {{ pageStart }}–{{ pageStop }} of {{ itemsLength }}</span>
-
-            <span class="ml-4">Page:</span>
-
-            <VSelect
+        <template v-slot:footer.page-text="{pageStart, pageStop, itemsLength}">
+          <div
+            :class="$vuetify.display.smAndDown?'v-data-footer__select smallFooter':'v-data-footer__select'"
+          >
+            <span
+              v-if="$vuetify.display.mdAndUp"
+            >Viewing items: {{ pageStart }}-{{ pageStop }} of {{ itemsLength }}</span>
+            <span style="margin-left: 10px;">Page:&nbsp;</span>
+            <v-select
               :items="pages"
-              item-title="page"
+              v-bind="page"
+              item-text="page"
               item-value="page"
+              menu-props="auto"
               hide-details
               style="width:75px;font-size:0.75rem;margin-right:20px;"
-            />
-
-            <span>of {{ maxPages }}</span>
+            ></v-select>
+            &nbsp;of&nbsp;{{ maxPages}}
           </div>
         </template>
-
-      </VDataTable>
-    </VCol>
-
-    <!-- Loader -->
-    <VProgressCircular
+      </v-data-table>
+    </v-col>
+    <v-progress-circular
       v-if="waiting"
+      :class="$vuetify.display.smAndDown ? 'waitCircleSm' : 'waitCircle'"
+      indeterminate
+      color="#319B42"
       :size="70"
       width="10"
-      color="#319B42"
-      indeterminate
-      class="waitCircle"
-    />
-  </VRow>
+    ></v-progress-circular>
+  </v-layout>
 </template>
 
 
@@ -199,6 +175,7 @@ export default {
     },
 
     selectCompany(item) {
+
       try {
         this.waiting = true;
 

@@ -1,6 +1,6 @@
 <template>
   <span>
-    <v-form ref="form" v-model="valid">
+    <v-form ref="form" v-model="valid" style="position:sticky !important;">
       <v-row>
         <v-layout
           align-content="center"
@@ -8,30 +8,31 @@
           justify="center"
           v-if="$vuetify.display.mdAndUp"
         >
-          <v-col lg="3" xl="3" md="4" sm="4">
+          <v-col lg="3" xl="3" md="4" sm="4" style="margin-left:40px !important;">
             <v-text-field
-              variant="solo"
-              v-bind="search"
+              variant="solo" rounded
+              v-model="search"
               label="Search for..."
               class="roundedTextBox"
               :rules="searchRules"
-              append-icon="search"
+             append-inner-icon="mdi-magnify"
               v-on:keyup.enter="gotoSearchBy('searchBy')"
             ></v-text-field>
           </v-col>
-          <v-col lg="1" xl="1" md="1" sm="1" align="center">
-            <span class="searchHeader">by</span>
+          <v-col lg="1" xl="1" md="1" sm="1" align="center" style="margin-top:20px !important;">
+            <span class="searchHeader" >by</span>
           </v-col>
           <v-col lg="3" xl="3" md="3" sm="4">
             <v-select
               :items="searchByItems"
-              v-bind="searchBy"
+              v-model="searchBy"
               :rules="searchByRules"
               class="roundedTextBox"
               ref="searchBy"
               @change.passive="$refs['searchRef'].$el.focus()"
               v-on:keyup.enter="$refs['searchRef'].$el.focus()"
-              variant="solo"
+              variant="solo" rounded
+              
             ></v-select>
           </v-col>
           <v-col lg="2" xl="1" md="2" sm="2" align="center">
@@ -45,7 +46,7 @@
               >Search</v-btn
             >
           </v-col>
-          <v-col lg="1" xl="1" md="2" sm="2">
+          <v-col lg="1" xl="1" md="2" sm="2" style="margin-left:-20px !important">
             <v-btn
               class="menuBtn"
               large
@@ -75,12 +76,12 @@
             <v-row>
               <v-col :cols="12" align="center">
                 <v-text-field
-                  solo
+                 variant="solo" rounded
                   label="Search for..."
                   class="roundedTextBox"
                   :rules="searchRules"
-                  append-icon="search"
-                  v-bind="search"
+                  append-inner-icon="mdi-magnify"
+                  v-model="search"
                   v-on:keyup.enter="gotoSearchBy('searchBy')"
                 ></v-text-field>
               </v-col>
@@ -94,9 +95,9 @@
               <v-col :cols="12" align="center">
                 <v-select
                   :items="searchByItems"
-                  v-bind="searchBy"
+                  v-model="searchBy"
                   :rules="searchByRules"
-                  solo
+                  variant="solo" rounded
                   class="roundedTextBox"
                   ref="searchBy"
                   @change.passive="$refs['searchRef'].$el.focus()"
