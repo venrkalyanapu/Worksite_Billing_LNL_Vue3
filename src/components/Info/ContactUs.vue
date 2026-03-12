@@ -354,7 +354,10 @@ export default {
     this.waiting = true;
     this.companyName = this.franchiseInfo.franchiseName;
     this.companyNumber = this.franchiseInfo.franchiseNumber;
-    this.phone = this.franchiseInfo.franchisePhone;
+    if (this.franchiseInfo.franchisePhone) 
+    {
+    this.phone = this.franchiseInfo.franchisePhone.replace(/\D/g, '');
+    }
     //this.emailAddress = this.userInfo;
     this.waiting = false;
   },
