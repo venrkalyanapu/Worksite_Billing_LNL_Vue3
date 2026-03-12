@@ -67,9 +67,9 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                    color="#319B42"
+                    color="#fafafa"                    
                     dark
-                    class="menuBtn topMargin"
+                    class="okBtn topMargin"
                     @click="showDidntGet = false"
                     >OK</v-btn>
         </v-card-actions>
@@ -249,7 +249,7 @@
                 label="*Password"
                 :rules="rules"
                :type="show ? 'text' : 'password'"
-               :append-inner-icon="show ? 'mdi-eye-off' : 'mdi-eye'"
+               :append-inner-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
                @click:append-inner="show = !show"
                 id="password"
                   name="password"
@@ -1044,6 +1044,13 @@ export default {
 .tbBackground {
   background-color: #44aba8;
   /* background-color: #00558c; */
+}
+.okBtn{
+  text-transform: none !important;
+  letter-spacing: normal;
+  border-radius: 20px;
+  margin-bottom: 30px;
+   background-color: #319B42;
 }
 .subtitle {
   color: #fafafa;

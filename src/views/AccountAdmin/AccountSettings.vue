@@ -1,9 +1,9 @@
 <template>
-  <v-layout align-center justify-center row wrap>
-    <v-flex xs12 class="padding">
+  <v-row align="center" justify="center" wrap>
+    <v-col cols="12" class="padding">
       <AccountSettingsPage />
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
