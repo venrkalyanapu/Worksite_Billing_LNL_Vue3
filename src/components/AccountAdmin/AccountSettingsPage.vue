@@ -44,8 +44,8 @@
                         <h3>Mobile Number</h3>
                       </v-col>
                       <v-col cols="9">
-                        <v-text-field label="(123) 123-1234" v-model="phoneInput" outlined single-line maxlength="14" autofocus :rules="phoneRules" 
-                         v-on:keypress.enter.prevent v-mask="'(###) ###-####'" />
+                        <v-mask-input label="(123) 123-1234" v-model="phoneInput" variant="outlined" single-line maxlength="14" autofocus :rules="phoneRules" 
+                         v-on:keypress.enter.prevent mask="(###) ###-####" />
                       </v-col>
                       <v-col cols="12">
                         <div style="margin-left: 15px;">Enter a valid mobile number. Standard SMS/Messaging rates may apply.</div>

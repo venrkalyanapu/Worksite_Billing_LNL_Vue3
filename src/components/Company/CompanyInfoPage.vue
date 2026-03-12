@@ -5,10 +5,10 @@
         <v-col cols="10">
           <v-card class="mx-auto" >
             <v-toolbar density="compact"
-  flat
-  color="secondary"
-  class="tbBackground px-4 py-3"
->
+              flat
+              color="secondary"
+              class="tbBackground px-4 py-3"
+            >
   <v-col class="d-flex align-center">
     <span class="font-weight-bold" style="font-size: 25px;">
       Update Address & Contact Info
@@ -119,26 +119,28 @@
                   ></v-text-field>
                 </v-col>
                 <v-col cols="100" sm="8" md="5">
-                  <v-text-field
+                  <v-mask-input
                     v-model="phone"
                     :rules="phoneRules"
                     label="*Billing Contact Phone Number"
                     variant="outlined"                    
                     autocomplete="phone"
                     :readonly="!allowUpdate"
-                    v-mask="'(###) ###-####'"
-                  ></v-text-field>
+                    mask="(###) ###-####"
+                    persistent-placeholder
+                  ></v-mask-input>
                 </v-col>
                 <v-col cols="100" sm="8" md="5">
-                  <v-text-field
+                  <v-mask-input
                     v-model="companyPhone"
                     :rules="companyPhoneRules"
                     label="Company Phone Number"
                     variant="outlined"
                     autocomplete="phone"
                     :readonly="!allowUpdate"
-                    v-mask="'(###) ###-####'"
-                  ></v-text-field>
+                    mask="(###) ###-####"
+                    persistent-placeholder
+                  ></v-mask-input>
                 </v-col>
                 <v-col cols="100" sm="8" md="5">
                   <v-text-field
@@ -492,7 +494,8 @@ export default {
               this.city = response.data.companyDetails[0].city;
               this.zip = response.data.companyDetails[0].zip;
               this.state = response.data.companyDetails[0].state;
-              this.phone = response.data.companyDetails[0].phone;
+              //this.phone = response.data.companyDetails[0].phone;  
+              this.phone = response.data.companyDetails[0].phone.replace(/\D/g, ''); 
               if (responseData.isPortalUpdatePending) {
                 this.allowUpdate = false;
                 this.setErrorMessages(
