@@ -5,7 +5,7 @@
       <v-layout align-center justify-center>
         <hr width="90%" />
       </v-layout>
-      <v-card-text v-show="!!message">{{ message }}</v-card-text>
+      <v-card-text class="confirmtext" v-show="!!message">{{ message }}</v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="#319B42" theme="dark" variant="flat" class="menuBtn" @click.native="agree">Yes</v-btn>
@@ -79,3 +79,13 @@ export default {
   }
 }
 </script>
+<style>
+.confirmtext{
+    font-size: .875rem !important;
+    font-weight: 400 !important;
+    line-height: 1.375rem 22px !important;
+    letter-spacing: .0071428571em !important;
+        color: rgba(0, 0, 0, .6) !important;
+        margin-top:-12px !important;
+}
+</style>
