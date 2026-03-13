@@ -2650,7 +2650,9 @@ import { onMounted, ref , nextTick} from 'vue';
    let isgroupshow = false;
    let isreviewdatatable = false;
  onMounted(() => {
+   nextTick(() => {
   openAllgroupby(false);
+   })
 });
 
  const openAllgroupby = (isreviewdatatable) => {
