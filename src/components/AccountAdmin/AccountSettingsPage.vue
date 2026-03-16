@@ -92,14 +92,14 @@
       <v-dialog v-model="passwordDialog" max-width="550" persistent >
         <v-form ref="passwordForm">
           <v-card>
-            <v-alert text color="warning" v-if="showErrorMessages">
-              <v-row class="error-message">
+            <v-alert text color="warning" v-if="showErrorMessages" >
+              <div class="error-message">
                 <ul id="errorMessage">
                   <li v-for="message in errorMessages" v-bind:key="message">
                     {{ message }}
                   </li>
                 </ul>
-              </v-row>
+              </div>
             </v-alert>
             <v-card-title class="px-4 py-3 tbBackground text-h6 font-weight-bold title">
               Change Password
