@@ -30,7 +30,7 @@
           app
           :color="mainColor"
           theme="dark"
-          class="$vuetify.display.mdAndUp?'padSides':''"
+          class="$vuetify.display.mdAndUp?'padSides':'' px-4"
           height="90"
           no-gutters
         >
@@ -68,65 +68,53 @@
           </v-col>
 
           <v-divider
-            inset
             vertical
-            class="mx-1"
+            class="mx-2 opacity-100 align-self-center"
+            style="height: 60px;"
             color="white"
             v-if="$vuetify.display.mdAndUp"
           ></v-divider>
 
-          <v-col v-if="$vuetify.display.xl" xl="5">
-            <span class="Title">Online Billing System</span>
-          </v-col>
-          <v-col v-if="$vuetify.display.lg" lg="3">
-            <span class="TitleLg">Online Billing System</span>
-          </v-col>
-          <v-col v-if="$vuetify.display.md" :cols="5">
-            <span class="Title">Online Billing System</span>
-          </v-col>
-          <v-col v-if="$vuetify.display.lgAndUp" lg="3" xl="2" md="2">
-            <v-row align="start" align-content="start" justify="start">
-              <span v-if="displayName != '' && displayName != null"
-                >Welcome {{ displayName }}</span
-              >
-            </v-row>
-          </v-col>
-          <v-col lg="2" md="3" xl="2" v-if="$vuetify.display.mdAndUp">
-            <v-row align="end" align-content="end" justify="end">
-              <span v-if="loggedIn" class="routerLink" @click="logOut"
-                >Log Out</span
-              >
-              <!-- <router-link v-if="loggedIn" to="/logout" class="routerLink">Log Out</router-link> -->
-              <router-link
-                v-if="showLoginLink()"
-                to="/"
-                ref="loginLink"
-                class="routerLink"
-                >Log In</router-link
-              >
+           <v-col v-if="$vuetify.display.mdAndUp" cols="12"  md="5" lg="4" xl="4" xxl="4" class="d-flex align-center" style="flex: 1;" >
+              <span class="ms-4 font-weight-bold"
+               :class="{ 'text-md-h5': $vuetify.display.md ,'text-lg-h4': $vuetify.display.lg, 'text-xl-h4': $vuetify.display.xl,'text-xl-h4': $vuetify.display.xxl }">
+                Online Billing System
+              </span>
+            </v-col>
+
+          <v-spacer></v-spacer>
+          
+          <div v-if="displayName" class="text-center">
+            <span v-if="$vuetify.display.lgAndUp">Welcome {{ displayName }}</span>
+          </div>
+          <v-spacer></v-spacer>
+          <div v-if="$vuetify.display.mdAndUp" class="d-flex align-center me-4">
+              <span v-if="loggedIn" class="routerLink" @click="logOut">Log Out</span>
+              <router-link 
+                v-if="showLoginLink()" 
+                to="/" 
+                class="routerLink">
+                Log In
+               </router-link>
               <span
-                v-if="
-                  ($route.path != '/login' || loggedIn) && $route.path != '/faq'
-                "
-                >&nbsp;|&nbsp;</span
-              >
-            </v-row>
-          </v-col>
-          <v-col>
-            <v-app-bar-nav-icon
-              @click.stop="showDrawer = !showDrawer"
-            ></v-app-bar-nav-icon>
-          </v-col>
-        </v-app-bar>
+                v-if="($route.path != '/login' || loggedIn) && $route.path != '/faq'">&nbsp;|&nbsp;</span>
+          </div>
+  
+            <v-app-bar-nav-icon 
+            @click.stop="showDrawer = !showDrawer"  
+             style="margin-right: 5% !important;"  
+             </v-app-bar-nav-icon >
+          </v-app-bar>
+
       </v-row>
       <v-row>
         <v-img
-  :src="getBackgroundImg()"
-  aspectRatio="2/3"
-  cover
-  height="200"
-  minWidth="100%"
->
+            :src="getBackgroundImg()"
+            aspectRatio="2/3"
+            cover
+            height="200"
+            minWidth="100%"
+          >
   <template #default>
     <div v-if="header">
       <span class="my-span">
