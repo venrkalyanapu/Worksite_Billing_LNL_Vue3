@@ -6,14 +6,24 @@
           <v-card class="mx-auto">
 
             <!-- HEADER -->
-            <header
+            <!-- <header
               class="px-2 py-3 v-sheet v-sheet--tile theme--dark v-toolbar v-toolbar--flat tbBackground"
             >
               <div style="padding-top: 15px; padding-left: 20px">
                 <b><span style="font-size: 25px">Update Payment Information</span></b>
               </div>
-            </header>
-
+            </header> -->
+            <v-toolbar density="compact"
+              flat
+              color="secondary"
+              class="tbBackground px-4 py-3"
+            >
+  <v-col class="d-flex align-center">
+    <span class="font-weight-bold" style="font-size: 25px;">
+      Update Payment Information
+    </span>
+  </v-col>
+</v-toolbar>
             <br />
 
             <!-- SUCCESS ALERT -->
@@ -164,7 +174,7 @@
                     <!-- ADD -->
                     <v-btn
                       v-if="allowUpdate"
-                      color="#319B42"
+                      color="#f1f3f1"
                       class="menuBtn"
                       :disabled="btnAddDisable"
                       @click.stop="paymentAdd"
@@ -183,7 +193,7 @@
                     <!-- UPDATE -->
                     <v-btn
                       v-if="allowUpdate"
-                      color="#319B42"
+                      color="#f1f3f1"
                       class="menuBtn"
                       :disabled="btnUpdateDisable"
                       @click.stop="paymentUpdate"
@@ -202,7 +212,7 @@
                     <!-- DELETE -->
                     <v-btn
                       v-if="allowUpdate"
-                      color="#319B42"
+                      color="#f1f3f1"
                       class="menuBtn"
                       :disabled="btnDeleteDisable"
                       @click.stop="deleteDialog = true"
@@ -247,14 +257,14 @@
           <v-card-actions>
             <v-spacer />
             <v-btn
-              color="#319B42"
+              color="#f1f3f1"
               class="menuBtn"
               @click="deleteDialog = false; validateDelete();"
             >
               Yes
             </v-btn>
             <v-btn
-              color="#319B42"
+              color="#f1f3f1"
               class="menuBtn"
               @click="deleteDialog = false"
             >
@@ -283,14 +293,14 @@
           <v-card-actions>
             <v-spacer />
             <v-btn
-              color="#319B42"
+              color="#f1f3f1"
               class="menuBtn"
               @click="paperDialog = false"
             >
               No
             </v-btn>
             <v-btn
-              color="#319B42"
+              color="#f1f3f1"
               class="menuBtn"
               @click="paperDialog = false; setPaperBill();"
             >
@@ -846,6 +856,7 @@ export default {
   text-transform: none !important;
   letter-spacing: normal;
   border-radius: 20px;
+  background-color: #319B42;
 }
 .bank-name {
   margin-left: 10px;
