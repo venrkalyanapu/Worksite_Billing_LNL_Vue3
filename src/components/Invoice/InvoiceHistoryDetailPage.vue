@@ -241,6 +241,8 @@
       dark
       must-sort
       no-data-text="No policies found."
+      page-text="Viewing items: {0}-{1} of {2}"
+        :items-per-page="10"
       items-per-page-text="Display records per page:"
       :footer-props="{
         'items-per-page-options': [10, 25, 50, 100, 200, -1],
